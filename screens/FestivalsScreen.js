@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, FlatList, ActivityIndicator, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, FlatList, ActivityIndicator, ScrollView, TouchableOpacity } from 'react-native';
 
 import * as firebase from 'firebase';
 
-const FestivalsScreen = () => {
+const FestivalsScreen = ({ navigation }) => {
   //Création de la base de données
   const db = firebase.firestore();
   const [festivals, setFestivals] = useState([])
@@ -13,11 +13,14 @@ const FestivalsScreen = () => {
   const getFestivals = async () => {
     const response = db.collection('Festivals');
     const data = await response.get();
+
     setIsFetching(true)
+    let f = []
     data.docs.forEach(item => {
-      setFestivals([...festivals, item.data()])
+      f.push(item.data())
       setIsFetching(true)
     })
+    setFestivals(f)
     setIsFetching(false)
   }
 
@@ -27,31 +30,63 @@ const FestivalsScreen = () => {
   }, []);
 
   if (!isFetching) {
+    console.log(festivals)
     return (
-      <ScrollView>
-        <View style={styles.container}>
-          <ActivityIndicator animating={isFetching} />
-          <View style={styles.listeFestivals}>
+      <View style={styles.container}>
+        <ActivityIndicator animating={isFetching} />
+        <View style={styles.listeFestivals}>
 
-            <FlatList
-              data={festivals}
-              keyExtractor={item => item.id}
-              renderItem={({ item }) => {
-                return (
-                  <View>
+          <FlatList
+            data={festivals}
+            keyExtractor={item => item.id}
+            renderItem={({ item }) => {
+              return (
+                <View style={{ flexDirection: 'column' }}>
+
+                  <View style={{ flexDirection: 'column' }}>
                     <Text>{item.id.toString()}. {item.nom} en {item.ville}</Text>
                   </View>
-                )
-              }
-              }
-            >
-            </FlatList>
-          </View>
+
+                  <View style={{ flexDirection: 'row' }}>
+                    {/* mettre le bouton comme component */}
+                    <View style={styles.bouton}>
+                      <TouchableOpacity
+                        onPress={() => navigation.navigate("Carte", {
+                          nom: item.nom,
+                          page: "FestivalsScreen",
+                          longitude: item.localisation.longitude,
+                          latitude: item.localisation.latitude
+                        })}>
+                        <Text>Trouver sur la carte</Text>
+                      </TouchableOpacity>
+                    </View>
+
+                    <View style={styles.bouton}>
+                      <TouchableOpacity
+                        onPress={() => navigation.navigate("Calendrier", {
+                          nom: item.nom,
+                          page: "FestivalsScreen",
+                          longitude: item.localisation.longitude,
+                          latitude: item.localisation.latitude,
+                          event: item
+                        })} >
+                        <Text>Ajouter sur le calendrier</Text>
+                      </TouchableOpacity>
+                    </View>
+
+                  </View>
+
+                </View>
+              )
+            }
+            }
+          >
+          </FlatList>
         </View>
-      </ScrollView>
+      </View>
     )
   }
-  else if (isFetching || festivals == undefined) {
+  else if (isFetching || (festivals == undefined || festivals == null)) {
     return (
       <View style={styles.container}>
         <Text>
@@ -73,5 +108,12 @@ const styles = StyleSheet.create({
   },
   listeFestivals: {
     flexDirection: "column"
+  },
+  bouton: {
+    backgroundColor: "#00a46c",
+    paddingHorizontal: 20,
+    paddingVertical: 5,
+    borderRadius: 15,
+    color: 'white'
   }
 });

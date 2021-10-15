@@ -5,7 +5,8 @@ import Header from '../components/Header';
 
 import { Calendar, CalendarList, Agenda } from 'react-native-calendars';
 
-const calendrier = () => {
+const calendrier = ({route,navigation}) => {
+  console.log(route.params)
   return (
     <View>
       <Header title="CALENDRIER"/>
