@@ -5,7 +5,7 @@ import { View, Text, Image, ImageBackground, StyleSheet } from 'react-native'
 import { TextInput, ScrollView, TouchableOpacity } from 'react-native-gesture-handler';
 import { LinearGradient } from 'expo-linear-gradient';
 
-function divGenerator(screenName,nom,navigation,img) {
+function divGenerator(screenName, nom, navigation, img) {
     img = img.toString()
     return (
         <View>
@@ -20,7 +20,7 @@ function divGenerator(screenName,nom,navigation,img) {
                     }}>
                     </View>
                 </View>
-                
+
             </View>
 
             <ScrollView horizontal showsHorizontalScrollIndicator={false} style={{ height: 400 }}>
@@ -57,8 +57,8 @@ const HomeScreen = ({ navigation }) => {
     const { user, logout } = useContext(AuthContext);
 
     return (
-        <ScrollView style={{backgroundColor: "#fff"}}>
-            <View style={{backgroundColor: "#5cdb95",height: "7%",borderBottomLeftRadius: 20,borderBottomRightRadius: 20,paddingHorizontal: 20}}>
+        <ScrollView style={{ backgroundColor: "#fff" }}>
+            <View style={{ backgroundColor: "#5cdb95", height: "7%", borderBottomLeftRadius: 20, borderBottomRightRadius: 20, paddingHorizontal: 20 }}>
                 <Image
                     source={require('../assets/1.png')}
                     style={{
@@ -91,7 +91,7 @@ const HomeScreen = ({ navigation }) => {
 
             <LinearGradient
                 colors={["rgba(0,210,109,0.4)", "transparent"]}
-                style={{left: 0,right: 0,height: 90,marginTop: -15}}>
+                style={{ left: 0, right: 0, height: 90, marginTop: -15 }}>
                 <View style={{
                     backgroundColor: "#fff",
                     paddingVertical: 8,
@@ -105,7 +105,7 @@ const HomeScreen = ({ navigation }) => {
                     <TextInput
                         placeholder="Recherche"
                         placeholderTextColor="black"
-                        style={{fontWeight: "bold",fontSize: 18,width: 320}}/>
+                        style={{ fontWeight: "bold", fontSize: 18, width: 320 }} />
                     <Image
                         source={require('../assets/Loop.png')}
                         style={{ height: 20, width: 20 }}
@@ -113,31 +113,32 @@ const HomeScreen = ({ navigation }) => {
                 </View>
             </LinearGradient>
             
-            {/* FESTIVALS */}
             <View>
-                {divGenerator("FestivalsScreen","FESTIVALS",navigation,'../assets/festivals3.jpg')}
+                {/* FESTIVALS */}
+                <View>
+                    {divGenerator("FestivalsScreen", "FESTIVALS", navigation, '../assets/festivals3.jpg')}
+                </View>
+                {/* RESTAURANTS */}
+                <View>
+                    {divGenerator("RestaurantScreen", "RESTAURANTS", navigation, '../assets/festivals.jpg')}
+                </View>
+                {/* PARTYS */}
+                <View>
+                    {divGenerator("PartyScreen", "PARTYS", navigation, '../assets/festivals3.jpg')}
+                </View>
+                {/* DATE */}
+                <View>
+                    {divGenerator("IdéeDateScreen", "RENCARDS", navigation, '../assets/festivals3.jpg')}
+                </View>
+                {/* ATTRACTIONS */}
+                <View>
+                    {divGenerator("AttractionScreen", "ATTRACTIONS", navigation, '../assets/festivals3.jpg')}
+                </View>
+                {/* SPORTS */}
+                <View>
+                    {divGenerator("sportsScreen", "SPORTS", navigation, '../assets/festivals3.jpg')}
+                </View>
             </View>
-            {/* RESTAURANTS */}
-            <View>
-                {divGenerator("RestaurantScreen","RESTAURANTS",navigation,'../assets/festivals.jpg')}
-            </View>
-            {/* PARTYS */}
-            <View>
-                {divGenerator("PartyScreen","PARTYS",navigation,'../assets/festivals3.jpg')}
-            </View>
-            {/* DATE */}
-            <View>
-                {divGenerator("IdéeDateScreen","RENCARDS",navigation,'../assets/festivals3.jpg')}
-            </View>
-            {/* ATTRACTIONS */}
-            <View>
-                {divGenerator("AttractionScreen","ATTRACTIONS",navigation,'../assets/festivals3.jpg')}
-            </View>
-            {/* SPORTS */}
-            <View>
-                {divGenerator("sportsScreen","SPORTS",navigation,'../assets/festivals3.jpg')}
-            </View>
-
         </ScrollView>
     )
 }

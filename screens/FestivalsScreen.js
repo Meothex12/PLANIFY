@@ -1,41 +1,46 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, FlatList, ActivityIndicator, ScrollView, TouchableOpacity } from 'react-native';
 
+import GetData from '../utils/GetData';
 import * as firebase from 'firebase';
+
+import EventButton from '../components/EventButton';
 
 const FestivalsScreen = ({ navigation }) => {
   //Création de la base de données
-  const db = firebase.firestore();
   const [festivals, setFestivals] = useState([])
   const [isFetching, setIsFetching] = useState(false)
 
-  /*--aller chercher tout les festivals--*/
   const getFestivals = async () => {
+    const db = firebase.firestore();
     const response = db.collection('Festivals');
     const data = await response.get();
-
     setIsFetching(true)
-    let f = []
+    let R = []
     data.docs.forEach(item => {
-      f.push(item.data())
+      R.push(item.data())
       setIsFetching(true)
     })
-    setFestivals(f)
+    setFestivals(R)
     setIsFetching(false)
   }
 
+
+  /*--aller chercher tout les festivals--*/
   useEffect(() => {
     setFestivals(null)
+    //setIsFetching(true)
+    //setFestivals(GetData('Festivals'))
     getFestivals()
+    //setIsFetching(false)
   }, []);
 
-  if (!isFetching) {
-    console.log(festivals)
+  if (festivals != undefined || festivals != null) {
+    let id = 1;
     return (
       <View style={styles.container}>
-        <ActivityIndicator animating={isFetching} />
         <View style={styles.listeFestivals}>
-
+          <ActivityIndicator animating={isFetching} color="black" size="large"/>
           <FlatList
             data={festivals}
             keyExtractor={item => item.id}
@@ -44,37 +49,10 @@ const FestivalsScreen = ({ navigation }) => {
                 <View style={{ flexDirection: 'column' }}>
 
                   <View style={{ flexDirection: 'column' }}>
-                    <Text>{item.id.toString()}. {item.nom} en {item.ville}</Text>
+                    <Text>{id++}. {item.nom} en {item.ville}</Text>
                   </View>
 
-                  <View style={{ flexDirection: 'row' }}>
-                    {/* mettre le bouton comme component */}
-                    <View style={styles.bouton}>
-                      <TouchableOpacity
-                        onPress={() => navigation.navigate("Carte", {
-                          nom: item.nom,
-                          page: "FestivalsScreen",
-                          longitude: item.localisation.longitude,
-                          latitude: item.localisation.latitude
-                        })}>
-                        <Text>Trouver sur la carte</Text>
-                      </TouchableOpacity>
-                    </View>
-
-                    <View style={styles.bouton}>
-                      <TouchableOpacity
-                        onPress={() => navigation.navigate("Calendrier", {
-                          nom: item.nom,
-                          page: "FestivalsScreen",
-                          longitude: item.localisation.longitude,
-                          latitude: item.localisation.latitude,
-                          event: item
-                        })} >
-                        <Text>Ajouter sur le calendrier</Text>
-                      </TouchableOpacity>
-                    </View>
-
-                  </View>
+                  <EventButton navigation={navigation} item={item} nomPage={"FestivalsScreen"} />
 
                 </View>
               )
@@ -86,12 +64,13 @@ const FestivalsScreen = ({ navigation }) => {
       </View>
     )
   }
-  else if (isFetching || (festivals == undefined || festivals == null)) {
+  else if (festivals == undefined || festivals == null) {
     return (
       <View style={styles.container}>
         <Text>
-          AUCUN FESTIVALS TROUVÉS
+          {/* AUCUN FESTIVALS TROUVÉS */}
         </Text>
+        <ActivityIndicator animating={true} color="black" size="large"/>
       </View>
     )
   }

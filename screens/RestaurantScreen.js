@@ -8,7 +8,8 @@ const RestaurantScreen = ({navigation}) => {
   const [isFetching, setIsFetching] = useState(false)
 
   /*--aller chercher tout les festivals--*/
-  const getFestivals = async () => {
+  const getRestaurants = async () => {
+    const db = firebase.firestore();
     const response = db.collection('Restaurants');
     const data = await response.get();
     setIsFetching(true)
@@ -23,7 +24,7 @@ const RestaurantScreen = ({navigation}) => {
 
   useEffect(() => {
     setRestaurants(null)
-    getFestivals()
+    getRestaurants()
   }, []);
 
   return (

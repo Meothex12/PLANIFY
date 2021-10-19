@@ -1,10 +1,9 @@
 import React from 'react';
-import { View, Text, StyleSheet, FlatList, ScrollView, Image } from 'react-native';
+import { View, Text, StyleSheet, FlatList, ScrollView,SafeAreaView, Image } from 'react-native';
 
 const forum = () => {
   return (
-    <ScrollView style={{ backgroundColor: "#5cdb95",flexDirection:'column' }}>
-      <View>
+    <ScrollView style={{ backgroundColor: "#5cdb95"}}>
         <View style={{
           backgroundColor: "#5cdb95", height: "7%", borderBottomLeftRadius: 20,
           borderBottomRightRadius: 20, paddingHorizontal: 20
@@ -40,10 +39,9 @@ const forum = () => {
         </View>
 
         <View style={{ backgroundColor: "#fff" }}>
-          <FlatList>
-          </FlatList>
+          {/* <FlatList>
+          </FlatList> */}
         </View>
-      </View>
     </ScrollView>
   )
 }

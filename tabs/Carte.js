@@ -2,6 +2,7 @@ import React from 'react';
 import { View, Text, StyleSheet, Dimensions,Button } from 'react-native';
 import MapView, { Polygon, Polyline, Marker } from 'react-native-maps';
 import Header from '../components/Header';
+
 let initialRegion = {
     longitude: -73.8446587,
     latitude: 45.6422237,
@@ -10,20 +11,26 @@ let initialRegion = {
 }
 const carte = ({ route, navigation }) => {
 
-    const évènement = route.params
+    let évènement = route.params
 
     if (évènement != undefined || évènement != null) {
         let latitudeEvent = évènement.latitude
         let longitudeEvent = évènement.longitude
-        const nom = évènement.nom
-        const page = évènement.page
+        let nom = évènement.nom
+        let page = évènement.page
 
         initialRegion.latitude = latitudeEvent
         initialRegion.longitude = longitudeEvent
+        const erase = () => 
+            évènement = null
+            latitudeEvent = null
+            longitudeEvent = null
+            nom = null
+            page = null
         return (
             <View>
                 <Header title="carte" />
-                <Button title={'⬅️ Retour à '+ nom} à onPress={()=>navigation.navigate(page)}/>
+                <Button title={'⬅️ Retour à '+ nom} à onPress={()=> {navigation.navigate(page);erase()}}/>
                 <MapView
                     style={styles.mapStyle}
                     initialRegion={initialRegion}>

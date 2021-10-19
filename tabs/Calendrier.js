@@ -11,7 +11,6 @@ const calendrier = ({route,navigation}) => {
     <View>
       <Header title="CALENDRIER"/>
       <Calendar
-        // Collection of dates that have to be marked. Default = {}
         markedDates={{
           '2021-09-16': { selected: true, marked: true, selectedColor: 'blue' },
           '2021-09-17': { marked: true },
