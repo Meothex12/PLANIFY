@@ -1,11 +1,11 @@
-import React,{useState,useEffect} from 'react';
-import { View, Text, StyleSheet, FlatList } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, StyleSheet, ActivityIndicator } from 'react-native';
 import * as firebase from 'firebase';
+import FlatListEvent from '../components/FlatListEvent';
 
-const sportsScreen = () => {
+const sportsScreen = ({ navigation }) => {
   const db = firebase.firestore();
   const [sports, setSports] = useState([])
-  const [isFetching, setIsFetching] = useState(false)
 
   /*--aller chercher tout les festivals--*/
   const getSports = async () => {
@@ -13,15 +13,11 @@ const sportsScreen = () => {
     const data = await response.get();
     let S = []
 
-    setIsFetching(true)
-
     data.docs.forEach(item => {
       S.push(item.data())
-      setIsFetching(true)
     })
 
     setSports(S)
-    setIsFetching(false)
   }
 
   useEffect(() => {
@@ -29,21 +25,19 @@ const sportsScreen = () => {
     getSports()
   }, []);
 
-  return (
-    <View style={styles.container}>
-      <FlatList 
-        data={sports} 
-        keyExtractor={item => item.id} 
-        renderItem={({ item }) => {
-          return (
-            <View>
-              <Text>{item.id}. {item.type} à l'{item.ExtérieurOuIntérieur}</Text>
-            </View>
-          )
-        }}>
-      </FlatList>
-    </View>
-  )
+  if (sports != null || sports != undefined) {
+    return (
+      <View style={styles.container}>
+        <FlatListEvent navigation={navigation} data={sports} nomPage={"sportsScreen"} />
+      </View>
+    )
+  } else if (sports == null || sports == undefined) {
+    return (
+      <View style={styles.container}>
+        <ActivityIndicator animating={true} color="black" size="large" />
+      </View>
+    )
+  }
 }
 
 export default sportsScreen;

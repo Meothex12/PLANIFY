@@ -1,25 +1,24 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, FlatList, ScrollView,Button } from 'react-native';
+import { View, Text, StyleSheet, FlatList, ScrollView, ActivityIndicator, TouchableOpacity } from 'react-native';
 import * as firebase from 'firebase';
 
-const RestaurantScreen = ({navigation}) => {
-  const db = firebase.firestore();
+import EventButton from '../components/EventButton';
+import FlatListEvent from '../components/FlatListEvent';
+
+const RestaurantScreen = ({ navigation }) => {
   const [restaurants, setRestaurants] = useState([])
-  const [isFetching, setIsFetching] = useState(false)
 
   /*--aller chercher tout les festivals--*/
   const getRestaurants = async () => {
     const db = firebase.firestore();
     const response = db.collection('Restaurants');
     const data = await response.get();
-    setIsFetching(true)
+
     let R = []
     data.docs.forEach(item => {
       R.push(item.data())
-      setIsFetching(true)
     })
     setRestaurants(R)
-    setIsFetching(false)
   }
 
   useEffect(() => {
@@ -27,43 +26,19 @@ const RestaurantScreen = ({navigation}) => {
     getRestaurants()
   }, []);
 
-  return (
-    <View style={styles.container}>
-      <Text>
-        RESTAURANTS
-      </Text>
-      <FlatList>
-
-      </FlatList>
-
-      <FlatList
-        data={restaurants}
-        keyExtractor={item => item.id}
-        renderItem={({ item }) => {
-          return (
-            <View>
-              <Text>{item.id.toString()}. {item.nom}</Text>
-
-              <ScrollView style={{ backgroundColor: "black" }}>
-                <View>
-                  <Text style={{ color: "white" }}>MENU</Text>
-                  <Text style={{ color: "white" }}>
-                    {item.menu.Plats.nom}, {item.menu.Plats.prix.toString()} $
-                  </Text>
-                </View>
-              </ScrollView>
-              <Button title="Trouver sur la carte" onPress={() => navigation.navigate("Carte", {
-                nom:item.nom,
-                page:"RestaurantScreen",
-                longitude: item.localisation.longitude,
-                latitude: item.localisation.latitude
-              })} />
-            </View>
-          )
-        }}>
-      </FlatList>
-    </View>
-  )
+  if (restaurants != null || restaurants != undefined) {
+    return (
+      <View style={styles.container}>
+        <FlatListEvent data={restaurants} nomPage={"RestaurantScreen"} navigation={navigation}/>
+      </View>)
+  }
+  else if (restaurants == null || restaurants == undefined) {
+    return(
+      <View>
+          <ActivityIndicator animating={true} color="black" size="large"/>
+      </View>
+    )
+  }
 }
 
 export default RestaurantScreen;

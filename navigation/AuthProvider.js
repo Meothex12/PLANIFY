@@ -1,8 +1,9 @@
 import React, { createContext, useState } from 'react';
 import auth from '@react-native-firebase/auth';
-import firebase from '../firebase/fire';
+// import firebase from '../firebase/fire';
 import { getAuth, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 
+import * as firebase from 'firebase';
 
 export const AuthContext = createContext();
 
@@ -10,6 +11,7 @@ export const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);
     const [errorRegister, setErrorRegister] = useState(null);
     const [errorLogin, setErrorLogin] = useState(null)
+    const db = firebase.firestore();
 
     //google
     const googleProvider = new firebase.auth.GoogleAuthProvider();
@@ -33,7 +35,17 @@ export const AuthProvider = ({ children }) => {
                 },
                 register: async (email, password) => {
                     try {
-                        await firebase.auth().createUserWithEmailAndPassword(email, password);
+                        await firebase.auth().createUserWithEmailAndPassword(email, password).then(cred =>{
+                            return db.collection('users').doc(cred.user.uid).set({
+                                FirsName: '',
+                                LastName:'',
+                                Phone: '',
+                                Email:email,
+                                Country:'',
+                                City:'',
+                                Password:password                       
+                            })
+                        })
                         console.log('account reegistered!')
                         setErrorRegister(null)
                     } catch (e) {

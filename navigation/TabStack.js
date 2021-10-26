@@ -2,13 +2,12 @@ import React from "react";
 import { View, StyleSheet } from 'react-native';
 
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { NavigationContainer } from '@react-navigation/native'
 
 import calendrier from '../tabs/Calendrier';
 import carte from '../tabs/Carte';
-import forum from '../tabs/Forum';
 import profil from '../tabs/Profil';
 import AppStack from './AppStack'
+import ForumStack from "./ForumStack"
 
 
 /*icons*/
@@ -44,7 +43,7 @@ const TabStack = () => {
                 inactiveTintColor: 'gray',
             }}>
             <Tab.Screen name="Calendrier" component={calendrier} options={{ headerShown: false }} />
-            <Tab.Screen name="Forum" component={forum} options={{ headerShown: false }} />
+            <Tab.Screen name="Forum" component={ForumStack} options={{ headerShown: false }} />
             <Tab.Screen name="Accueil" component={AppStack} options={{ headerShown: false }} />
             <Tab.Screen name="Carte" component={carte} options={{ headerShown: false }} />
             <Tab.Screen name="Profil" component={profil} options={{ headerShown: false }} />

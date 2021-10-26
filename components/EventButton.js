@@ -4,7 +4,6 @@ import { StyleSheet, Text, View, TouchableOpacity } from 'react-native'
 const EventButton = ({navigation,item,nomPage}) => {
     return (
         <View style={{ flexDirection: 'row' }}>
-            {/* mettre le bouton comme component */}
             <View style={styles.bouton}>
                 <TouchableOpacity
                     onPress={() => navigation.navigate("Carte", {
@@ -20,10 +19,7 @@ const EventButton = ({navigation,item,nomPage}) => {
             <View style={styles.bouton}>
                 <TouchableOpacity
                     onPress={() => navigation.navigate("Calendrier", {
-                        nom: item.nom,
                         page: nomPage,
-                        longitude: item.localisation.longitude,
-                        latitude: item.localisation.latitude,
                         event: item
                     })} >
                     <Text>Ajouter sur le calendrier</Text>
