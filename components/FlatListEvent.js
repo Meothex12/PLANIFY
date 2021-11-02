@@ -1,66 +1,77 @@
 import React from 'react';
-import { View, Text, StyleSheet, FlatList, TouchableOpacity } from 'react-native';
-
+import { View, Text, StyleSheet, FlatList, TouchableOpacity, ScrollView, Button, ActivityIndicator } from 'react-native';
+import * as firebase from 'firebase';
 import EventButton from './EventButton';
-const Event = ({ item, navigation, nomPage }) => {
+
+const deleteEventById = async (id) => {
+    await firebase.firestore().collection("Ajouts").doc(id).delete();
+
+    console.log(id)
+
+    return id;
+}
+
+const Event = ({ item, navigation, nomPage,id }) => {
     /*--variables--*/
     let localisation = ""
     let description = ""
-
     if (item.localisation != null || item.localisation != undefined)
         localisation = item.localisation
+    else
+        localisation = {longitude:43,latitude:73}//null
     if (item.Description != null || item.Description != undefined)
         description = item.Description
+    else
+        description = ""
 
     return (
         <View style={styles.item}>
-            <View style={{ flexDirection: 'column' }}>
-                {/* titre */}
-                <View style={{flexDirection:'row'}}>
-                    <Text style={styles.titre}>{item.nom}</Text>
-                    {/* Bouton pour lenlever' */}
-                    <TouchableOpacity style={styles.boutonDelete} onPress={()=>console.log("delete",item.nom)}>
-                        <Text>🗑️</Text>
+            {/* titre */}
+            <Text style={styles.titre}>{item.nom}</Text>
+            <View style={{ flexDirection: 'row' }}>
+                {/* Bouton pour lenlever' */}
+                <TouchableOpacity style={styles.boutonDelete} onPress={() => deleteEventById(id)}>
+                    <Text>🗑️</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.boutonEdit}  onPress={() => navigation.navigate("EditEventScreen", {id: item.nom})}>
+                        <Text>✎</Text>
                     </TouchableOpacity>
-                </View>
-                {/* description */}
-                <View style={{ flexDirection: 'row' }}>
-                    <Text>
-                        {description}
-                    </Text>
-                </View>
-                <EventButton navigation={navigation} item={item} nomPage={nomPage} />
             </View>
+
+            {/* description */}
+            <View style={{ flexDirection: 'row' }}>
+                <Text>
+                    {description}
+                </Text>
+            </View>
+            <EventButton navigation={navigation} item={item} nomPage={nomPage} />
         </View>
     )
 }
 
 const FlatListEvent = ({ data, navigation, nomPage }) => {
-    const D = data    
+    const D = data
+    id = 1
     if (D != null || D != undefined) {
         return (
             <View style={styles.container}>
-                <View style={styles.liste}>
+                <ScrollView style={styles.liste}>
                     <FlatList
                         data={D}
                         keyExtractor={item => item.id}
                         renderItem={({ item }) => {
                             return (
-                                <Event item={item} navigation={navigation} nomPage={nomPage}/>
+                                <Event item={item} navigation={navigation} nomPage={nomPage} id={id++} />
                             )
                         }
                         }
                     />
-                </View>
+                </ScrollView>
             </View>
         )
     }
     else if (data == null || data == undefined) {
-        return (
-            <View style={styles.container}>
-                <Text>AUCUNS ÉVÈNEMENTS TROUVÉS</Text>
-            </View>
-        )
+        return (<ActivityIndicator animating={true} color="black" size="large" />)
     }
 }
 
@@ -73,23 +84,24 @@ const styles = StyleSheet.create({
         justifyContent: 'center'
     },
     liste: {
-        flexDirection: "column"
+        flexDirection: "column",
+        backgroundColor:'beige'
     },
-    titre:{
-        fontSize:35
+    titre: {
+        fontSize: 35
     },
-    item:{
-        borderColor:'black',
-        margin:'5%',
-        flexDirection:'row'
+    item: {
+        backgroundColor:'#edf5e1',
+        borderColor: 'black',
+        borderWidth: 5,
+        margin: '5%',
+        flexDirection: 'column'
     },
     boutonDelete: {
-        backgroundColor: "red",
         paddingHorizontal: 20,
         paddingVertical: 5,
         borderRadius: 15,
-        marginRight:45,
-        color: 'white',
+        marginRight: 45,
         alignItems: 'center'
     }
 })

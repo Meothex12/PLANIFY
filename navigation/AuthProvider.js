@@ -11,6 +11,7 @@ export const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);
     const [errorRegister, setErrorRegister] = useState(null);
     const [errorLogin, setErrorLogin] = useState(null)
+    const [errorLogout, setErrorLogout] = useState(null)
     const db = firebase.firestore();
 
     //google
@@ -23,6 +24,7 @@ export const AuthProvider = ({ children }) => {
                 setUser,
                 errorLogin,
                 errorRegister,
+                errorLogout,
                 login: async (email, password) => {
                     try {
                         await firebase.auth().signInWithEmailAndPassword(email, password);
@@ -37,13 +39,16 @@ export const AuthProvider = ({ children }) => {
                     try {
                         await firebase.auth().createUserWithEmailAndPassword(email, password).then(cred =>{
                             return db.collection('users').doc(cred.user.uid).set({
-                                FirsName: '',
+                                FirstName: '',
                                 LastName:'',
                                 Phone: '',
                                 Email:email,
                                 Country:'',
                                 City:'',
-                                Password:password                       
+                                Sex:'',
+                                Image:'',
+                                Password:password,
+                                isAdmin:false                 
                             })
                         })
                         console.log('account reegistered!')
@@ -56,22 +61,25 @@ export const AuthProvider = ({ children }) => {
                 logout: async () => {
                     try {
                         await firebase.auth().signOut();
+                        setErrorRegister(null)
                         console.log('Logout')
                     } catch (e) {
+                        setErrorLogout(e)
                         console.log(e);
                     }
-                },
-                loginWithGoogle: async () => {
-                    await firebase.auth().signInWithPopup(googleProvider)
-                        .then((result) => {
-                            const credential = GoogleAuthProvider.credentialFromResult(result);
-                            const token = credential.accessToken;
-                            const user = result.user;
-                            console.log(user)
-                        }).catch((error) => {
-                            console.log(error)
-                        });
                 }
+                // ,
+                // loginWithGoogle: async () => {
+                //     await firebase.auth().signInWithPopup(googleProvider)
+                //         .then((result) => {
+                //             const credential = GoogleAuthProvider.credentialFromResult(result);
+                //             const token = credential.accessToken;
+                //             const user = result.user;
+                //             console.log(user)
+                //         }).catch((error) => {
+                //             console.log(error)
+                //         });
+                // }
             }}
         >
             {children}

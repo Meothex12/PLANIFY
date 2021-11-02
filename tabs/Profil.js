@@ -1,6 +1,7 @@
 import React, { useContext, useState, useEffect } from 'react';
 import { SafeAreaView, ScrollView, StyleSheet, View, Text, Image, TextInput, TouchableOpacity, ActivityIndicator } from "react-native";
 import Header from "../components/Header";
+import PlanifyIndicator from "../components/PlanifyIndicator"
 import { AuthContext } from '../navigation/AuthProvider';
 import FormButton from '../components/FormButton';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
@@ -18,133 +19,200 @@ const Profil = () => {
 
     const [userInfo, setUserInfo] = useState()
 
+    //informations utilisateurs
+    const [City, setCity] = useState(undefined)
+    const [Country, setCountry] = useState(undefined)
+    const [Email, setEmail] = useState(undefined)
+    const [lastName, setLastName] = useState(undefined)
+    const [firstName, setFirstName] = useState(undefined)
+    const [imageProfil, setImageProfil] = useState(undefined)
+    const [password, setPassword] = useState(undefined)
+    const [phone, setPhone] = useState(undefined)
+    const [sex, setSex] = useState(undefined)
+
     const getUserInfo = () => {
         const db = firebase.firestore();
-
         const ref = db.collection("users").doc(user.uid);
 
         ref.get().then((doc) => {
             setUserInfo(doc.data())
         })
+
+        setValues()
+    }
+
+    function userIsNotNull() {
+        if (userInfo != null || userInfo != undefined)
+            return true
+        return false
+    }
+
+    function setValues() {
+        if (userIsNotNull()) {
+            setCity(userInfo.City)
+            setCountry(userInfo.Country)
+            setEmail(userInfo.Email)
+            setLastName(userInfo.LastName)
+            setFirstName(userInfo.FirstName)
+            setImageProfil(userInfo.Image)
+            setPassword(userInfo.Password)
+            setPhone(userInfo.Phone)
+            setSex(userInfo.Sex)
+        }
     }
 
     useEffect(() => {
         getUserInfo()
-        console.log(userInfo)
     }, []);
 
-    return (
-        <SafeAreaView style={styles.container}>
-            <Header title='Profile' />
-            <ScrollView showsVerticalScrollIndicator={false}
-                contentContainerStyle={{ paddingBottom: 30 }}>
+    if (userIsNotNull() && userInfo != undefined) {
+        let placeholderEmail = "Email"
+        let placeholderFirstName = "Firstname"
+        let placeholderLastName = "Lastname"
+        let placeholderPhone = "Phone"
+        let placeholderCity = "City"
+        let placeholderCountry = "Country"
 
-                <View style={styles.profileInfos}>
-                    <Image style={styles.image} source={{ uri: url }} />
-                    <View style={styles.name}>
-                        <Text style={styles.nameChar}>Brandon Ianniciello</Text>
-                        <Text style={styles.email}>{user.email}</Text>
-                        
+        return (
+            <SafeAreaView style={styles.container}>
+                <Header title='Profile' />
+                <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: 30 }}>
+                    <View style={styles.profileInfos}>
+                        {/* image de profil */}
+                        <Image style={styles.image} source={{ uri: url }} />
+                        {/* nom de l'utilisateur */}
+                        <View style={styles.name}>
+                            <Text style={styles.nameChar}>{firstName} {lastName}</Text>
+                            <Text style={styles.email}>{Email}</Text>
+                        </View>
                     </View>
-                </View>
 
-                <View style={styles.action}>
-                    <FontAwesome name="user-o" color={colors.text} size={20} />
-                    <TextInput
-                        placeholder={"à remplacer par le nom wesh"}
-                        placeholderTextColor="#666666"
-                        autoCorrect={false}
-                        style={[
-                            styles.textInput,
-                            {
-                                color: colors.text,
-                            },
-                        ]}
-                    />
-                </View>
-                
-                <View style={styles.action}>
-                    <FontAwesome name="user-o" color={colors.text} size={20} />
-                    <TextInput
-                        placeholder="Last Name"
-                        placeholderTextColor="#666666"
-                        autoCorrect={false}
-                        style={[
-                            styles.textInput,
-                            {
-                                color: colors.text,
-                            },
-                        ]}
-                    />
-                </View>
-                <View style={styles.action}>
-                    <Feather name="phone" color={colors.text} size={20} />
-                    <TextInput
-                        placeholder="Phone"
-                        placeholderTextColor="#666666"
-                        keyboardType="number-pad"
-                        autoCorrect={false}
-                        style={[
-                            styles.textInput,
-                            {
-                                color: colors.text,
-                            },
-                        ]}
-                    />
-                </View>
-                <View style={styles.action}>
-                    <FontAwesome name="envelope-o" color={colors.text} size={20} />
-                    <TextInput
-                        placeholder={user.email}
-                        placeholderTextColor="#666666"
-                        keyboardType="email-address"
-                        autoCorrect={false}
-                        style={[
-                            styles.textInput,
-                            {
-                                color: colors.text,
-                            },
-                        ]}
-                    />
-                </View>
-                <View style={styles.action}>
-                    <FontAwesome name="globe" color={colors.text} size={20} />
-                    <TextInput
-                        placeholder="Country"
-                        placeholderTextColor="#666666"
-                        autoCorrect={false}
-                        style={[
-                            styles.textInput,
-                            {
-                                color: colors.text,
-                            },
-                        ]}
-                    />
-                </View>
-                <View style={styles.action}>
-                    <Icon name="map-marker-outline" color={colors.text} size={20} />
-                    <TextInput
-                        placeholder="City"
-                        placeholderTextColor="#666666"
-                        autoCorrect={false}
-                        style={[
-                            styles.textInput,
-                            {
-                                color: colors.text,
-                            },
-                        ]}
-                    />
-                </View>
-                <TouchableOpacity style={styles.commandButton} onPress={() => { }}>
-                    <Text style={styles.panelButtonTitle}>Submit</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.commandButton,{backgroundColor:'red'}} onPress={() => logout()}>
-                    <Text style={styles.panelButtonTitle}>Logout</Text>
-                </TouchableOpacity>
-            </ScrollView>
-        </SafeAreaView>
-    )
+                    {/* modification du prénom */}
+                    <View style={styles.action}>
+                        <FontAwesome name="user-o" color={colors.text} size={20} />
+                        <TextInput
+                            placeholder={placeholderFirstName}
+                            placeholderTextColor="#666666"
+                            autoCorrect={false}
+                            style={[
+                                styles.textInput,
+                                {
+                                    color: colors.text,
+                                },
+                            ]}
+                            value={firstName}
+                            onChangeText={(txt) => setFirstName(txt)}
+                        />
+                    </View>
 
+                    {/* modification du nom de famille */}
+                    <View style={styles.action}>
+                        <FontAwesome name="user-o" color={colors.text} size={20} />
+                        <TextInput
+                            placeholder={placeholderLastName}
+                            placeholderTextColor="#666666"
+                            autoCorrect={false}
+                            style={[
+                                styles.textInput,
+                                {
+                                    color: colors.text,
+                                },
+                            ]}
+                            value={lastName}
+                        />
+                    </View>
+
+                    {/* modification du num de tel */}
+                    <View style={styles.action}>
+                        <Feather name="phone" color={colors.text} size={20} />
+                        <TextInput
+                            placeholder={placeholderPhone}
+                            placeholderTextColor="#666666"
+                            keyboardType="number-pad"
+                            autoCorrect={false}
+                            style={[
+                                styles.textInput,
+                                {
+                                    color: colors.text,
+                                },
+                            ]}
+                            value={phone}
+                        />
+                    </View>
+
+                    {/* modification du courriel */}
+                    <View style={styles.action}>
+                        <FontAwesome name="envelope-o" color={colors.text} size={20} />
+                        <TextInput
+                            placeholder={placeholderEmail}
+                            placeholderTextColor="#666666"
+                            keyboardType="email-address"
+                            autoCorrect={false}
+                            style={[
+                                styles.textInput,
+                                {
+                                    color: colors.text,
+                                },
+                            ]}
+                            value={Email}
+                        />
+                    </View>
+                    {/* modification du pays */}
+                    <View style={styles.action}>
+                        <FontAwesome name="globe" color={colors.text} size={20} />
+                        <TextInput
+                            placeholder={placeholderCountry}
+                            placeholderTextColor="#666666"
+                            autoCorrect={false}
+                            style={[
+                                styles.textInput,
+                                {
+                                    color: colors.text,
+                                },
+                            ]}
+                            value={Country}
+                        />
+                    </View>
+                    {/* modification de la ville */}
+                    <View style={styles.action}>
+                        <Icon name="map-marker-outline" color={colors.text} size={20} />
+                        <TextInput
+                            placeholder={placeholderCity}
+                            placeholderTextColor="#666666"
+                            autoCorrect={false}
+                            style={[
+                                styles.textInput,
+                                {
+                                    color: colors.text,
+                                },
+                            ]}
+                            value={City}
+                        />
+                    </View>
+                    <TouchableOpacity style={styles.commandButton} onPress={() => setValues()}>
+                        <Text style={styles.panelButtonTitle}>Refresh</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.commandButton} onPress={() => { }}>
+                        <Text style={styles.panelButtonTitle}>Submit</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.commandButton, { backgroundColor: 'red' }} onPress={() => logout()}>
+                        <Text style={styles.panelButtonTitle}>Logout</Text>
+                    </TouchableOpacity>
+                </ScrollView>
+            </SafeAreaView>
+        )
+
+    }
+    else if (!userIsNotNull()) {
+        return (
+            <View style={styles.container}>
+                <PlanifyIndicator/>
+                <TouchableOpacity style={styles.commandButton, { backgroundColor: 'red' }} onPress={() => logout()}>
+                        <Text style={styles.panelButtonTitle}>Logout</Text>
+                    </TouchableOpacity>
+            </View>
+        )
+    }
 }
 
 export default Profil;
@@ -211,6 +279,6 @@ const styles = StyleSheet.create({
         backgroundColor: 'red',
         width: 70,
         borderRadius: 10,
-         marginLeft: 170,
+        marginLeft: 170,
     }
 })
