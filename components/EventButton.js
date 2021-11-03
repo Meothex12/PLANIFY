@@ -2,8 +2,9 @@ import React from "react"
 import { StyleSheet, Text, View, TouchableOpacity } from 'react-native'
 
 const EventButton = ({navigation,item,nomPage}) => {
-    return (
-        <View style={{ flexDirection: 'row' }}>
+    let boutonCarte = <View></View>
+    if(item.localisation != undefined){
+        boutonCarte = (
             <View style={styles.bouton}>
                 <TouchableOpacity
                     onPress={() => navigation.navigate("Carte", {
@@ -15,7 +16,12 @@ const EventButton = ({navigation,item,nomPage}) => {
                     <Text>Trouver sur la carte</Text>
                 </TouchableOpacity>
             </View>
-
+        )
+    }
+    
+    return (
+        <View style={{ flexDirection: 'row' }}>
+            {boutonCarte}
             <View style={styles.bouton}>
                 <TouchableOpacity
                     onPress={() => navigation.navigate("Calendrier", {

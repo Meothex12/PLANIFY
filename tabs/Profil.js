@@ -29,15 +29,13 @@ const Profil = () => {
     const [password, setPassword] = useState(undefined)
     const [phone, setPhone] = useState(undefined)
     const [sex, setSex] = useState(undefined)
+    const db = firebase.firestore();
 
     const getUserInfo = () => {
-        const db = firebase.firestore();
         const ref = db.collection("users").doc(user.uid);
-
         ref.get().then((doc) => {
             setUserInfo(doc.data())
         })
-
         setValues()
     }
 
@@ -59,6 +57,21 @@ const Profil = () => {
             setPhone(userInfo.Phone)
             setSex(userInfo.Sex)
         }
+    }
+
+    function editValues( firstName, lastName, phone, email, country, city, sex, img, password) {
+        console.log("Submit the edit for user#:",userInfo.id)
+        return db.collection('users').doc(userInfo.id).set({
+            FirstName: firstName,
+            LastName: lastName,
+            Phone: phone,
+            Email: email,
+            Country: country,
+            City: city,
+            Sex: sex,
+            Image: img,
+            Password: password
+        })
     }
 
     useEffect(() => {
@@ -85,8 +98,13 @@ const Profil = () => {
                             <Text style={styles.nameChar}>{firstName} {lastName}</Text>
                             <Text style={styles.email}>{Email}</Text>
                         </View>
-                    </View>
 
+                    </View>
+                    <View>
+                        <TouchableOpacity style={styles.refreshBouton} onPress={() => setValues()}>
+                            <Text style={styles.panelButtonTitle}>Refresh</Text>
+                        </TouchableOpacity>
+                    </View>
                     {/* modification du prénom */}
                     <View style={styles.action}>
                         <FontAwesome name="user-o" color={colors.text} size={20} />
@@ -119,6 +137,7 @@ const Profil = () => {
                                 },
                             ]}
                             value={lastName}
+                            onChangeText={(txt) => setLastName(txt)}
                         />
                     </View>
 
@@ -137,6 +156,7 @@ const Profil = () => {
                                 },
                             ]}
                             value={phone}
+                            onChangeText={(txt) => setPhone(txt)}
                         />
                     </View>
 
@@ -155,6 +175,7 @@ const Profil = () => {
                                 },
                             ]}
                             value={Email}
+                            onChangeText={(txt) => setEmail(txt)}
                         />
                     </View>
                     {/* modification du pays */}
@@ -171,6 +192,7 @@ const Profil = () => {
                                 },
                             ]}
                             value={Country}
+                            onChangeText={(txt) => setCountry(txt)}
                         />
                     </View>
                     {/* modification de la ville */}
@@ -187,12 +209,11 @@ const Profil = () => {
                                 },
                             ]}
                             value={City}
+                            onChangeText={(txt) => setCity(txt)}
                         />
                     </View>
-                    <TouchableOpacity style={styles.commandButton} onPress={() => setValues()}>
-                        <Text style={styles.panelButtonTitle}>Refresh</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity style={styles.commandButton} onPress={() => { }}>
+
+                    <TouchableOpacity style={styles.commandButton} onPress={() => editValues( firstName, lastName, phone, Email, Country, City, sex, imageProfil, password)}>
                         <Text style={styles.panelButtonTitle}>Submit</Text>
                     </TouchableOpacity>
                     <TouchableOpacity style={styles.commandButton, { backgroundColor: 'red' }} onPress={() => logout()}>
@@ -206,10 +227,10 @@ const Profil = () => {
     else if (!userIsNotNull()) {
         return (
             <View style={styles.container}>
-                <PlanifyIndicator/>
+                <PlanifyIndicator />
                 <TouchableOpacity style={styles.commandButton, { backgroundColor: 'red' }} onPress={() => logout()}>
-                        <Text style={styles.panelButtonTitle}>Logout</Text>
-                    </TouchableOpacity>
+                    <Text style={styles.panelButtonTitle}>Logout</Text>
+                </TouchableOpacity>
             </View>
         )
     }
@@ -275,8 +296,8 @@ const styles = StyleSheet.create({
         color: 'white',
         textAlign: 'center'
     },
-    logoutButton: {
-        backgroundColor: 'red',
+    refreshBouton: {
+        backgroundColor: 'green',
         width: 70,
         borderRadius: 10,
         marginLeft: 170,

@@ -27,21 +27,25 @@ const forum = ({ navigation }) => {
   }, []);
 
   return (
-    <View style={{ backgroundColor: "#5cdb95" }}>
-      <Image
+    <ScrollView style={{ backgroundColor: "#dcdcdc" }}>
+      <View style={{
+        backgroundColor: "dcdcdc", height: "10%", borderBottomLeftRadius: 20,
+        borderBottomRightRadius: 20, width:'100%',marginTop:20
+      }}>
+      {/* <Image
         source={require('../assets/1.png')}
         style={{
           height: 10,
           width: 20,
           marginTop: 50
         }}
-      />
+      /> */}
       <View style={{ flexDirection: "row", alignItems: "center", marginTop: 10, width: "100%" }}>
         {/* Texte d'accueil du forum */}
-        <View style={{ width: "50%", backgroundColor: "#5cdb95" }}>
+        <View style={{ width: "50%", backgroundColor: "#dcdcdc" }}>
           <Text style={{
             fontSize: 28,
-            color: "#edf5e1",
+            color: "#141823",
             fontWeight: "bold"
           }}>
             Bienvenue sur le forum de Planify
@@ -57,7 +61,6 @@ const forum = ({ navigation }) => {
       </View>
 
       <View style={{ flexDirection: 'column', alignItems: 'center' }}>
-
         <View style={{flexDirection:'row'}}>
           {/* bouton pour ajouter un event */}
           <TouchableOpacity style={styles.boutonAdd} onPress={() => navigation.navigate("AddEventScreen")}>
@@ -75,7 +78,8 @@ const forum = ({ navigation }) => {
         </View>
 
       </View>
-    </View>
+      </View>
+    </ScrollView>
   )
 }
 

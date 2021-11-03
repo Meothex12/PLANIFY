@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, Dimensions, Button,TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, Dimensions, Button, TouchableOpacity } from 'react-native';
 import MapView, { Callout, Circle, Polygon, Polyline } from 'react-native-maps';
 import Header from '../components/Header';
 
@@ -17,13 +17,22 @@ const carte = ({ route, navigation }) => {
         longitudeDelta: 0.05
     }
 
-    let évènement=null
-    console.log(item.nom)
-    if(route.params!=null||route.params!=undefined)
+    let évènement = null
+    let latitudeEvent = initialRegion.latitude
+    let longitudeEvent = initialRegion.longitude
+    let nom = ""
+    let page = "HomeScreen"
+
+    if (route.params != undefined) {
         évènement = route.params
-    else{
-        alert("AUCUNE LOCALISATION POUR ",item.nom.toUpperCase())
-        navigation.goBack(null)
+        if (route.params.latitude != undefined || route.params.longitude != undefined) {
+            latitudeEvent = route.params.latitude
+            longitudeEvent = route.params.longitude
+        }
+        if (route.params.nom != undefined)
+            nom = route.params.nom
+        if (route.params.page != undefined)
+            page = route.params.page
     }
 
     const [pin, setPin] = useState({ latitude: initialRegion.latitude, longitude: initialRegion.longitude })
@@ -31,26 +40,20 @@ const carte = ({ route, navigation }) => {
 
     //si le user a cliqué sur "Trouver sur la carte"
     if (évènement != undefined || évènement != null) {
-        let latitudeEvent = évènement.latitude
-        let longitudeEvent = évènement.longitude
-        let nom = évènement.nom
-        let page = évènement.page
 
         initialRegion.latitude = latitudeEvent
         initialRegion.longitude = longitudeEvent
         return (
             <View style={{ marginTop: 50, flex: 1 }}>
-                <View style={{flexDirection:'column'}}>
+                <View style={{ flexDirection: 'column' }}>
                     <Header title="carte" />
-                    <TouchableOpacity onPress={()=> {
-                        // initialRegion.latitude =45.642249982790126
-                        // initialRegion.longitude =-73.8423519855052
+                    <TouchableOpacity onPress={() => {
                         évènement = null
                         navigation.navigate(page);
-                    }} 
-                    style={styles.boutonRetour}
+                    }}
+                        style={styles.boutonRetour}
                     >
-                        <Text style={{textAlign:'center'}}>
+                        <Text style={{ textAlign: 'center' }}>
                             Retourner à {nom}
                         </Text>
                     </TouchableOpacity>
@@ -60,7 +63,7 @@ const carte = ({ route, navigation }) => {
                     initialRegion={initialRegion}
                     showsUserLocation={true}
                     provider="google">
-                    <MapView.Marker coordinate={{ latitude:latitudeEvent , longitude: longitudeEvent}} />
+                    <MapView.Marker coordinate={{ latitude: latitudeEvent, longitude: longitudeEvent }} />
                 </MapView>
             </View>
         )
@@ -109,7 +112,7 @@ const carte = ({ route, navigation }) => {
 
             </View>
         )
-    }    
+    }
 }
 
 export default carte;
@@ -124,12 +127,12 @@ const styles = StyleSheet.create({
         width: Dimensions.get('window').width,
         height: Dimensions.get('window').height,
     },
-    boutonRetour:{
+    boutonRetour: {
         backgroundColor: "#00a46c",
         paddingHorizontal: 20,
         paddingVertical: 5,
         borderRadius: 15,
         color: 'white',
-        alignContent:'center'
+        alignContent: 'center'
     }
 });
