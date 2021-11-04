@@ -30,55 +30,46 @@ const forum = ({ navigation }) => {
     <ScrollView style={{ backgroundColor: "#dcdcdc" }}>
       <View style={{
         backgroundColor: "dcdcdc", height: "10%", borderBottomLeftRadius: 20,
-        borderBottomRightRadius: 20, width:'100%',marginTop:20
+        borderBottomRightRadius: 20, width: '100%', marginTop: 20
       }}>
-      {/* <Image
-        source={require('../assets/1.png')}
-        style={{
-          height: 10,
-          width: 20,
-          marginTop: 50
-        }}
-      /> */}
-      <View style={{ flexDirection: "row", alignItems: "center", marginTop: 10, width: "100%" }}>
-        {/* Texte d'accueil du forum */}
-        <View style={{ width: "50%", backgroundColor: "#dcdcdc" }}>
-          <Text style={{
-            fontSize: 28,
-            color: "#141823",
-            fontWeight: "bold"
-          }}>
-            Bienvenue sur le forum de Planify
-          </Text>
-        </View>
-        {/* Image */}
-        <View style={{ width: "50%", alignItems: "flex-end" }}>
-          <Image
-            source={require('../assets/CalendarV3.png')}
-            style={{ height: 60, width: 60 }}
-          />
-        </View>
-      </View>
 
-      <View style={{ flexDirection: 'column', alignItems: 'center' }}>
-        <View style={{flexDirection:'row'}}>
-          {/* bouton pour ajouter un event */}
-          <TouchableOpacity style={styles.boutonAdd} onPress={() => navigation.navigate("AddEventScreen")}>
-            <Text>Ajouter un event</Text>
-          </TouchableOpacity>
-          {/* bouton qui va rafraichir */}
-          <TouchableOpacity style={styles.boutonAdd} onPress={() => getAjouts()}>
-            <Text>Rafraichir</Text>
-          </TouchableOpacity>
+        <View style={{ flexDirection: "row", alignItems: "center", marginTop: 50, width: "100%", paddingHorizontal: 20,paddingBottom:100 }}>
+          {/* Texte d'accueil du forum */}
+          <View style={{ width: "50%", backgroundColor: "#dcdcdc" }}>
+            <Text style={{
+              fontSize: 28,
+              color: "#141823",
+              fontWeight: "bold"
+            }}>
+              Bienvenue sur le forum de Planify
+            </Text>
+          </View>
+          {/* Image */}
+          <View style={{ width: "50%", alignItems: "flex-end" }}>
+            <Image
+              source={require('../assets/CalendarV3.png')}
+              style={{ height: 60, width: 60 }}
+            />
+          </View>
         </View>
 
-        {/* Liste de tout les ajouts */}
-        <View>
-          <FlastListEvent data={ajouts} navigation={navigation} nomPage="Forum" />
-        </View>
 
       </View>
+      <View style={{paddingTop:20}}>
+        <TouchableOpacity style={styles.bouton} onPress={() => navigation.navigate("AddEventScreen")}>
+          <Text>Ajouter un event</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.bouton} onPress={() => getAjouts()}>
+          <Text>Rafraichir</Text>
+        </TouchableOpacity>
       </View>
+      {/* Liste de tout les ajouts */}
+      <View style={{ flexDirection: 'column', flex: 1 }}>
+        <FlastListEvent data={ajouts} navigation={navigation} nomPage="Forum" />
+      </View>
+
+
+
     </ScrollView>
   )
 }
@@ -91,11 +82,17 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center'
   },
-  boutonAdd: {
-    color: 'black',
-    backgroundColor: "#00a46c",        // backgroundColor: 'rgba(52, 52, 52, 0.8)',
+  bouton: {
+    backgroundColor: "white",
     paddingHorizontal: 20,
     paddingVertical: 5,
-    borderRadius: 15
+    borderRadius: 15,
+    color: 'white'
+  },
+  boutonAdd: {
+    backgroundColor: "white",
+    paddingHorizontal: 20,
+    paddingVertical: 5,
+    color: 'white',
   }
 });

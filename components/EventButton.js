@@ -1,9 +1,10 @@
 import React from "react"
 import { StyleSheet, Text, View, TouchableOpacity } from 'react-native'
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
-const EventButton = ({navigation,item,nomPage}) => {
+const EventButton = ({ navigation, item, nomPage }) => {
     let boutonCarte = <View></View>
-    if(item.localisation != undefined){
+    if (item.localisation != undefined) {
         boutonCarte = (
             <View style={styles.bouton}>
                 <TouchableOpacity
@@ -13,12 +14,12 @@ const EventButton = ({navigation,item,nomPage}) => {
                         longitude: item.localisation.longitude,
                         latitude: item.localisation.latitude
                     })}>
-                    <Text>Trouver sur la carte</Text>
+                    <Ionicons name={'md-map'} size={20} color={'gray'} />
                 </TouchableOpacity>
             </View>
         )
     }
-    
+
     return (
         <View style={{ flexDirection: 'row' }}>
             {boutonCarte}
@@ -28,7 +29,7 @@ const EventButton = ({navigation,item,nomPage}) => {
                         page: nomPage,
                         event: item
                     })} >
-                    <Text>Ajouter sur le calendrier</Text>
+                    <Ionicons name={'calendar-outline'} size={20} color={'gray'} />
                 </TouchableOpacity>
             </View>
         </View>
@@ -39,8 +40,7 @@ export default EventButton
 
 const styles = StyleSheet.create({
     bouton: {
-        backgroundColor: "#00a46c",
-        paddingHorizontal: 20,
+        paddingHorizontal: 90,
         paddingVertical: 5,
         borderRadius: 15,
         color: 'white'

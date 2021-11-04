@@ -33,7 +33,6 @@ const AddEventScreen = ({ navigation, route }) => {
     }
 
     function addEvent(titre, description, catégorie, user) {
-        console.log(user.uid)
         const db = firebase.firestore();
         if (titre == "" || titre == undefined || titre == null) {
             alert("TITRE VIDE...🤔")
@@ -52,14 +51,20 @@ const AddEventScreen = ({ navigation, route }) => {
         }
 
         console.log(titre, " add in db")
-        return db.collection('Ajouts').doc(titre).set({
-            nom: titre,
-            Description: description,
-            Date: new Date(),
-            User: user.uid,
-            Catégorie: catégorie
-            //localisation:{longitude:,latitude} de son cell
-        })
+
+        try {
+            return db.collection('Ajouts').add({
+                nom: titre,
+                Description: description,
+                Date: new Date(),
+                User: user.uid,
+                Catégorie: catégorie
+                //localisation:{longitude:,latitude} de son cell
+            })
+        } catch (e) {
+            console.log("ERREUR DANS L'AJOUT D'UN EVENT:", e)
+        }
+
     }
 
     return (
@@ -98,7 +103,7 @@ const AddEventScreen = ({ navigation, route }) => {
                 placeholderTextColor={'#c7c7c7'}
                 underlineColorAndroid={'transparent'}
             />
-            <TouchableOpacity style={styles.bouton} onPress={() => { addEvent(titre, description, user); erase() }}>
+            <TouchableOpacity style={styles.bouton} onPress={() => { addEvent(titre, description, catégorie, user); navigation.navigate('Forum') }}>
                 <Text>Ajouter</Text>
             </TouchableOpacity>
         </View>

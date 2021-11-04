@@ -32,6 +32,7 @@ const Profil = () => {
     const db = firebase.firestore();
 
     const getUserInfo = () => {
+        setUserInfo(null)
         const ref = db.collection("users").doc(user.uid);
         ref.get().then((doc) => {
             setUserInfo(doc.data())
@@ -59,8 +60,8 @@ const Profil = () => {
         }
     }
 
-    function editValues( firstName, lastName, phone, email, country, city, sex, img, password) {
-        console.log("Submit the edit for user#:",userInfo.id)
+    function editValues(firstName, lastName, phone, email, country, city, sex, img, password) {
+        console.log("Submit the edit for user#:", userInfo.id)
         return db.collection('users').doc(userInfo.id).set({
             FirstName: firstName,
             LastName: lastName,
@@ -70,12 +71,15 @@ const Profil = () => {
             City: city,
             Sex: sex,
             Image: img,
-            Password: password
+            Password: password,
+            isAdmin:userInfo.isAdmin,
+            id:userInfo.id
         })
     }
 
     useEffect(() => {
         getUserInfo()
+        setValues()
     }, []);
 
     if (userIsNotNull() && userInfo != undefined) {
@@ -96,7 +100,10 @@ const Profil = () => {
                         {/* nom de l'utilisateur */}
                         <View style={styles.name}>
                             <Text style={styles.nameChar}>{firstName} {lastName}</Text>
-                            <Text style={styles.email}>{Email}</Text>
+                            <Text style={styles.email}>{user.email}</Text>
+                            <TouchableOpacity style={styles.logoutButton} onPress={() => logout()}>
+                                <Text style={styles.panelButtonTitle}>Logout</Text>
+                            </TouchableOpacity>
                         </View>
 
                     </View>
@@ -107,7 +114,7 @@ const Profil = () => {
                     </View>
                     {/* modification du prénom */}
                     <View style={styles.action}>
-                        <FontAwesome name="user-o" color={colors.text} size={20} />
+                        <FontAwesome name="user-o" color={colors.text} size={20} style={{ marginBottom: 5 }} />
                         <TextInput
                             placeholder={placeholderFirstName}
                             placeholderTextColor="#666666"
@@ -125,7 +132,7 @@ const Profil = () => {
 
                     {/* modification du nom de famille */}
                     <View style={styles.action}>
-                        <FontAwesome name="user-o" color={colors.text} size={20} />
+                        <FontAwesome name="user-o" color={colors.text} size={20} style={{ marginBottom: 5 }} />
                         <TextInput
                             placeholder={placeholderLastName}
                             placeholderTextColor="#666666"
@@ -143,7 +150,7 @@ const Profil = () => {
 
                     {/* modification du num de tel */}
                     <View style={styles.action}>
-                        <Feather name="phone" color={colors.text} size={20} />
+                        <Feather name="phone" color={colors.text} size={20} style={{ marginBottom: 5 }} />
                         <TextInput
                             placeholder={placeholderPhone}
                             placeholderTextColor="#666666"
@@ -162,7 +169,7 @@ const Profil = () => {
 
                     {/* modification du courriel */}
                     <View style={styles.action}>
-                        <FontAwesome name="envelope-o" color={colors.text} size={20} />
+                        <FontAwesome name="envelope-o" color={colors.text} size={20} style={{ marginBottom: 5 }} />
                         <TextInput
                             placeholder={placeholderEmail}
                             placeholderTextColor="#666666"
@@ -180,7 +187,7 @@ const Profil = () => {
                     </View>
                     {/* modification du pays */}
                     <View style={styles.action}>
-                        <FontAwesome name="globe" color={colors.text} size={20} />
+                        <FontAwesome name="globe" color={colors.text} size={20} style={{ marginBottom: 5 }} />
                         <TextInput
                             placeholder={placeholderCountry}
                             placeholderTextColor="#666666"
@@ -197,7 +204,7 @@ const Profil = () => {
                     </View>
                     {/* modification de la ville */}
                     <View style={styles.action}>
-                        <Icon name="map-marker-outline" color={colors.text} size={20} />
+                        <Icon name="map-marker-outline" color={colors.text} size={20} style={{ marginBottom: 5 }} />
                         <TextInput
                             placeholder={placeholderCity}
                             placeholderTextColor="#666666"
@@ -213,11 +220,8 @@ const Profil = () => {
                         />
                     </View>
 
-                    <TouchableOpacity style={styles.commandButton} onPress={() => editValues( firstName, lastName, phone, Email, Country, City, sex, imageProfil, password)}>
+                    <TouchableOpacity style={styles.commandButton} onPress={() => editValues(firstName, lastName, phone, Email, Country, City, sex, imageProfil, password)}>
                         <Text style={styles.panelButtonTitle}>Submit</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity style={styles.commandButton, { backgroundColor: 'red' }} onPress={() => logout()}>
-                        <Text style={styles.panelButtonTitle}>Logout</Text>
                     </TouchableOpacity>
                 </ScrollView>
             </SafeAreaView>
@@ -298,6 +302,18 @@ const styles = StyleSheet.create({
     },
     refreshBouton: {
         backgroundColor: 'green',
+        width: 70,
+        borderRadius: 10,
+        marginLeft: 170,
+    },
+    panelButtonTitle: {
+        fontSize: 17,
+        fontWeight: 'bold',
+        color: 'white',
+        textAlign: 'center'
+    },
+    logoutButton: {
+        backgroundColor: "#e88832",
         width: 70,
         borderRadius: 10,
         marginLeft: 170,

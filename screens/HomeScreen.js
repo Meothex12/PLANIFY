@@ -1,24 +1,11 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState,useEffect } from 'react';
 import FormButton from '../components/FormButton';
 import { AuthContext } from '../navigation/AuthProvider';
 import { View, Text, Image, ImageBackground, StyleSheet } from 'react-native'
 import { TextInput, ScrollView, TouchableOpacity } from 'react-native-gesture-handler';
 import { LinearGradient } from 'expo-linear-gradient';
-import * as firebase from 'firebase';
+
 const HomeScreen = ({ navigation }) => {
-
-    const { user } = useContext(AuthContext);
-    const [userInfo, setUserInfo] = useState()
-
-    const getUserInfo = () => {
-        console.log("dans getUSerInfo")
-        const db = firebase.firestore();
-        const ref = db.collection("users").doc(user.uid);
-
-        ref.get().then((doc) => {
-            setUserInfo(doc.data())
-        })
-    }
 
     function divGenerator(screenName, nom, navigation, img) {
         img = img.toString()
@@ -44,8 +31,7 @@ const HomeScreen = ({ navigation }) => {
                         style={{ position: "absolute", left: 0, right: 0, height: 100, marginTop: 220, top: 0 }} />
                     <TouchableOpacity
                         onPress={() => {
-                            getUserInfo()
-                            navigation.navigate(screenName, { userInfo: userInfo });
+                            navigation.navigate(screenName);
                         }}
                         style={{
                             height: 240,
@@ -70,7 +56,6 @@ const HomeScreen = ({ navigation }) => {
             </View>
         )
     }
-
 
 
     return (
