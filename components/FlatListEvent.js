@@ -5,6 +5,7 @@ import EventButton from './EventButton';
 import { AuthContext } from '../navigation/AuthProvider';
 
 const deleteEventById = async (id) => {
+    console.log("delete event:",id)
     await firebase.firestore().collection("Ajouts").doc(id).delete();
     return id;
 }
@@ -25,7 +26,7 @@ const Event = ({ item, navigation, nomPage, userInfo, uid }) => {
             crudButton = (
                 <View style={{ flexDirection: 'row' }}>
                     {/* Bouton pour lenlever' */}
-                    <TouchableOpacity style={styles.boutonDelete} onPress={() => deleteEventById(id)}>
+                    <TouchableOpacity style={styles.boutonDelete} onPress={() => deleteEventById(item.nom)}>
                         <Text>🗑️</Text>
                     </TouchableOpacity>
                     <TouchableOpacity style={styles.boutonEdit} onPress={() => navigation.navigate("EditEventScreen", { id: item.nom })}>

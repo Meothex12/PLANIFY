@@ -27,6 +27,7 @@ const EditEventScreen = ({ route, navigation }) => {
 
     function editEvent(id, titre, description, catégorie, user) {
         const db = firebase.firestore();
+        even
         return db.collection('Ajouts').doc(id).set({
             Description: description,
             nom: titre,

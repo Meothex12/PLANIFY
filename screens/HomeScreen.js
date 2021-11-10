@@ -91,30 +91,6 @@ const HomeScreen = ({ navigation }) => {
                 </View>
             </View>
 
-            <LinearGradient
-                colors={["rgba(0,210,109,0.4)", "transparent"]}
-                style={{ left: 0, right: 0, height: 90, marginTop: -15 }}>
-                <View style={{
-                    backgroundColor: "#fff",
-                    paddingVertical: 8,
-                    paddingHorizontal: 20,
-                    marginHorizontal: 20,
-                    borderRadius: 15,
-                    marginTop: 0,
-                    flexDirection: "row",
-                    alignItems: "center"
-                }}>
-                    <TextInput
-                        placeholder="Recherche"
-                        placeholderTextColor="black"
-                        style={{ fontWeight: "bold", fontSize: 18, width: 320 }} />
-                    <Image
-                        source={require('../assets/Loop.png')}
-                        style={{ height: 20, width: 20 }}
-                    />
-                </View>
-            </LinearGradient>
-
             <View>
                 {/* FESTIVALS */}
                 <View>
