@@ -1,5 +1,5 @@
 import React, { useContext, useState, useEffect } from 'react';
-import { SafeAreaView, ScrollView, StyleSheet, View, Text, Image, TextInput, TouchableOpacity, ActivityIndicator } from "react-native";
+import { SafeAreaView, ScrollView, StyleSheet, View, Text, Image, TextInput, TouchableOpacity } from "react-native";
 import Header from "../components/Header";
 import PlanifyIndicator from "../components/PlanifyIndicator"
 import { AuthContext } from '../navigation/AuthProvider';
@@ -11,13 +11,13 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import * as firebase from 'firebase';
 
-const url = "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png";
-
-const Profil = () => {
+const Profil = ({navigation}) => {
     const { user, logout } = useContext(AuthContext);
     const { colors } = useTheme();
 
     const [userInfo, setUserInfo] = useState()
+
+    const resourcePath = {}
 
     //informations utilisateurs
     const [City, setCity] = useState(undefined)
@@ -62,6 +62,7 @@ const Profil = () => {
 
     function editValues(firstName, lastName, phone, email, country, city, sex, img, password) {
         console.log("Submit the edit for user#:", userInfo.id)
+        // RECRÉATION DE COMPTE SI BESOIN DE RAJOUTER UN CHAMP
         return db.collection('users').doc(userInfo.id).set({
             FirstName: firstName,
             LastName: lastName,
@@ -72,8 +73,8 @@ const Profil = () => {
             Sex: sex,
             Image: img,
             Password: password,
-            isAdmin:userInfo.isAdmin,
-            id:userInfo.id
+            isAdmin: userInfo.isAdmin,
+            id: userInfo.id
         })
     }
 
@@ -96,7 +97,9 @@ const Profil = () => {
                 <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: 30 }}>
                     <View style={styles.profileInfos}>
                         {/* image de profil */}
-                        <Image style={styles.image} source={{ uri: url }} />
+                        <TouchableOpacity onPress={() => navigation.navigate("SelectPhotos",{photoUrl:imageProfil})}>
+                            <Image style={styles.image} source={{ uri: imageProfil }} />
+                        </TouchableOpacity>
                         {/* nom de l'utilisateur */}
                         <View style={styles.name}>
                             <Text style={styles.nameChar}>{firstName} {lastName}</Text>
