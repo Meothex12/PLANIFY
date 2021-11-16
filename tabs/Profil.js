@@ -66,6 +66,8 @@ const Profil = ({navigation}) => {
     function editValues(firstName, lastName, phone, email, country, city, sex, img, password) {
         console.log("Submit the edit for user#:", userInfo.id)
         // RECRÉATION DE COMPTE SI BESOIN DE RAJOUTER UN CHAMP
+        if(img=="")
+            img = "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"
         return db.collection('users').doc(userInfo.id).set({
             FirstName: firstName,
             LastName: lastName,

@@ -44,3 +44,6 @@ npm install react-native-camera --save
 expo install expo-image-picker
 npm install react-native-image-picker --save
 
+npm install @react-native-community/datetimepicker --save
+
+
