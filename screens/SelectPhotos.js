@@ -1,11 +1,14 @@
-//import * as ImagePicker from 'react-native-image-picker';
+import * as ImagePicker from 'react-native-image-picker';
 import React, { useContext, useState, useEffect } from 'react';
 import { StyleSheet, View, Text, Image, TextInput, TouchableOpacity, ActivityIndicator } from "react-native";
 
 const SelectPhotos = ({ route, navigation }) => {
 
     let source = ""
-    let url = route.params.photoUrl
+    let url = "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"
+    if(route.params!=undefined)
+        url = route.params.photoUrl
+    
     const [state, setState] = useState({ resourcePath: {} })
     console.log(url)
     const cameraLaunch = () => {
@@ -77,6 +80,7 @@ const SelectPhotos = ({ route, navigation }) => {
                 source={{ uri: url }}
                 style={{ width: 200, height: 200 }}
             />
+            
             <TouchableOpacity onPress={cameraLaunch} style={styles.button}  >
                 <Text style={styles.buttonText}>Lancer la caméra</Text>
             </TouchableOpacity>

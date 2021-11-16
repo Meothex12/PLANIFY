@@ -39,6 +39,8 @@ npm install @react-native-community/geolocation --save
 npm install react-native link @react-native-community/geolocation
 npm install --save react-native-calendars
 
-npm install react-native-camera --save
+npm install react-native-camera --save 
+
+expo install expo-image-picker
 npm install react-native-image-picker --save
 

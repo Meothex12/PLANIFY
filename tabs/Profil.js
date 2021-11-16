@@ -17,15 +17,13 @@ const Profil = ({navigation}) => {
 
     const [userInfo, setUserInfo] = useState()
 
-    const resourcePath = {}
-
     //informations utilisateurs
     const [City, setCity] = useState(undefined)
     const [Country, setCountry] = useState(undefined)
     const [Email, setEmail] = useState(undefined)
     const [lastName, setLastName] = useState(undefined)
     const [firstName, setFirstName] = useState(undefined)
-    const [imageProfil, setImageProfil] = useState(undefined)
+    const [imageProfil, setImageProfil] = useState("https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png")
     const [password, setPassword] = useState(undefined)
     const [phone, setPhone] = useState(undefined)
     const [sex, setSex] = useState(undefined)
@@ -48,16 +46,21 @@ const Profil = ({navigation}) => {
 
     function setValues() {
         if (userIsNotNull()) {
+            if(userInfo.Image == null || userInfo.Image == "")
+                setImageProfil("https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png")
+            else
+                setImageProfil(userInfo.Image)
             setCity(userInfo.City)
             setCountry(userInfo.Country)
             setEmail(userInfo.Email)
             setLastName(userInfo.LastName)
             setFirstName(userInfo.FirstName)
-            setImageProfil(userInfo.Image)
             setPassword(userInfo.Password)
             setPhone(userInfo.Phone)
             setSex(userInfo.Sex)
         }
+
+        
     }
 
     function editValues(firstName, lastName, phone, email, country, city, sex, img, password) {
@@ -97,7 +100,7 @@ const Profil = ({navigation}) => {
                 <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: 30 }}>
                     <View style={styles.profileInfos}>
                         {/* image de profil */}
-                        <TouchableOpacity onPress={() => navigation.navigate("SelectPhotos",{photoUrl:imageProfil})}>
+                        <TouchableOpacity onPress={() => {navigation.navigate("SelectPhotos",{photoUrl:imageProfil})}}>
                             <Image style={styles.image} source={{ uri: imageProfil }} />
                         </TouchableOpacity>
                         {/* nom de l'utilisateur */}
@@ -260,8 +263,7 @@ const styles = StyleSheet.create({
         height: 120,
         borderRadius: 60,
         borderColor: '#dddddd',
-        borderWidth: 1,
-        backgroundColor: '#dcdcdc'
+        borderWidth: 1
     },
     name: {
         marginLeft: 25,
