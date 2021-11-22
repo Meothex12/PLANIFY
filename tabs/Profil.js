@@ -35,7 +35,6 @@ const Profil = ({navigation}) => {
         ref.get().then((doc) => {
             setUserInfo(doc.data())
         })
-        setValues()
     }
 
     function userIsNotNull() {
@@ -45,11 +44,10 @@ const Profil = ({navigation}) => {
     }
 
     function setValues() {
+        getUserInfo()
         if (userIsNotNull()) {
             if(userInfo.Image == null || userInfo.Image == "")
                 setImageProfil("https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png")
-            else
-                setImageProfil(userInfo.Image)
             setCity(userInfo.City)
             setCountry(userInfo.Country)
             setEmail(userInfo.Email)
@@ -59,8 +57,6 @@ const Profil = ({navigation}) => {
             setPhone(userInfo.Phone)
             setSex(userInfo.Sex)
         }
-
-        
     }
 
     function editValues(firstName, lastName, phone, email, country, city, sex, img, password) {
@@ -68,6 +64,8 @@ const Profil = ({navigation}) => {
         // RECRÉATION DE COMPTE SI BESOIN DE RAJOUTER UN CHAMP
         if(img=="")
             img = "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"
+        else
+            img = imageProfil
         return db.collection('users').doc(userInfo.id).set({
             FirstName: firstName,
             LastName: lastName,
@@ -98,7 +96,6 @@ const Profil = ({navigation}) => {
 
         return (
             <SafeAreaView style={styles.container}>
-                <Header title='Profile' />
                 <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: 30 }}>
                     <View style={styles.profileInfos}>
                         {/* image de profil */}
@@ -116,7 +113,7 @@ const Profil = ({navigation}) => {
 
                     </View>
                     <View>
-                        <TouchableOpacity style={styles.refreshBouton} onPress={() => setValues()}>
+                        <TouchableOpacity style={styles.refreshBouton} onPress={() => {getUserInfo();setValues()}}>
                             <Text style={styles.panelButtonTitle}>Refresh</Text>
                         </TouchableOpacity>
                     </View>

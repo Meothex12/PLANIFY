@@ -36,7 +36,6 @@ const forum = ({ navigation }) => {
         backgroundColor: "dcdcdc", height: "10%", borderBottomLeftRadius: 20,
         borderBottomRightRadius: 20, width: '100%', marginTop: 20
       }}>
-
         <View style={{ flexDirection: "row", alignItems: "center", marginTop: 50, width: "100%", paddingHorizontal: 20, paddingBottom: 100 }}>
           {/* Texte d'accueil du forum */}
           <View style={{ width: "50%", backgroundColor: "#dcdcdc" }}>
@@ -61,7 +60,7 @@ const forum = ({ navigation }) => {
       </View>
       <View style={{ paddingTop: 20 }}>
         <TouchableOpacity style={styles.bouton} onPress={() => navigation.navigate("AddEventScreen")}>
-          <Text>Ajouter un event</Text>
+          <Text>Ajouter un évènement</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.bouton} onPress={() => getAjouts()}>
           <Text>Rafraichir</Text>
