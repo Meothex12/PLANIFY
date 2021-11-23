@@ -1,26 +1,29 @@
 import React, { useEffect, useContext, useState } from 'react';
-import { View, Text, StyleSheet, FlatList, TouchableOpacity, ScrollView, Button, ActivityIndicator } from 'react-native';
+import { View, Text, StyleSheet, FlatList, TouchableOpacity, ScrollView, Button, ActivityIndicator, Image } from 'react-native';
 import * as firebase from 'firebase';
 import Event from '../components/Event';
 import EventGoogle from '../components/EventGoogle';
 import { AuthContext } from '../navigation/AuthProvider';
 import { Rating, AirbnbRating } from 'react-native-ratings';
 
+
 const FlatListGoogleEvents = ({ eventClique, details, data, navigation }) => {
     const D = data
     let description = "vous"
     let image = ""
+    const API_KEY = "AIzaSyA4BtUvJDZEH-CFXNFbjNO-bI5He2Zlm3U"
+
     if (eventClique != undefined) {
         description = eventClique.description
     }
     if (details != undefined) {
         console.log(details.photos)
-        /*
-        https://maps.googleapis.com/maps/api/place/photo
-  ?maxwidth=400
-  &photo_reference=Aap_uEA7vb0DDYVJWEaX3O-AtYp77AaswQKSGtDaimt3gt7QCNpdjp1BkdM6acJ96xTec3tsV_ZJNL_JP-lqsVxydG3nh739RE_hepOOL05tfJh2_ranjMadb3VoBYFvF0ma6S24qZ6QJUuV6sSRrhCskSBP5C1myCzsebztMfGvm7ij3gZT
-  &key=YOUR_API_KEY
-        */
+        image = (
+            'https://maps.googleapis.com/maps/api/place/photo' +
+            '?maxwidth=400' +
+            '&photo_reference=+' + details.photos[0].photo_reference +
+            '&key=' + API_KEY
+        )
     }
     if (D != null || D != undefined) {
         return (
@@ -33,7 +36,27 @@ const FlatListGoogleEvents = ({ eventClique, details, data, navigation }) => {
                     </View>
                     <Text>Adresse : {details.formatted_address}</Text>
                     <Text>Numéro de téléphone : {details.formatted_phone_number}</Text>
-                    {/* <Image source={{uri:}/> */}
+
+                    {/* liste d'images */}
+                    <View style={{ width: 200, height: 100 }}>
+                        <FlatList
+                            style={{ flexDirection: 'row' }}
+                            data={details.photos}
+                            renderItem={({ item }) => {
+                                return (
+                                    <View>
+                                        <Image style={{ width: 200, height: 100 }} source={{
+                                            uri:
+                                                ('https://maps.googleapis.com/maps/api/place/photo' +
+                                                    '?maxwidth=400' +
+                                                    '&photo_reference=+' + item.photo_reference +
+                                                    '&key=' + API_KEY)
+                                        }} />
+                                    </View>
+                                )
+                            }}
+                        />
+                    </View>
                     {/* Review */}
                     <Text style={{ fontSize: 15, paddingLeft: 5, fontWeight: 'bold' }}>Commentaires</Text>
                     <FlatList
