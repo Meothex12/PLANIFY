@@ -2,8 +2,6 @@ import React, { useEffect, useContext, useState } from 'react';
 import { View, Text, StyleSheet, FlatList, TouchableOpacity, ScrollView, Button, Image } from 'react-native';
 import EventButton from './EventButton';
 import { Rating, AirbnbRating } from 'react-native-ratings';
-import * as firebase from 'firebase';
-
 
 const EventGoogle = ({ item, navigation, nomPage }) => {
 
