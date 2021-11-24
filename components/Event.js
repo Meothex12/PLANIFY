@@ -6,7 +6,7 @@ import * as firebase from 'firebase';
 const deleteEventById = async (id) => {
     try {
         await firebase.firestore().collection("Ajouts").doc(id).delete();
-        alert(`${id} supprimé`)//nom de l'event à mettre dans l'alert
+        alert(`${id} supprimé`)
     }
     catch (e) {
         console.log("Erreur dans la suppression d'un event dans le forum:\n", e)
@@ -17,41 +17,40 @@ const deleteEventById = async (id) => {
     }
 }
 
-const generateUserEvent = (id) => {
-    //console.log(id)
-    const db = firebase.firestore();
-    let tabInfos = []
-    const [user, setUser] = useState()
-    const ref = db.collection("users").doc(id);
 
-    ref.get().then((doc) => {
-        setUser(doc.data())
-    })
-
-    if (user != undefined) {
-        if (user.image == "")
-            user.image = "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"
-        return (
-            <View>
-                <View style={{ flexDirection: 'row' }}>
-                    <Image
-                        style={{
-                            width: 60,
-                            height: 60,
-                            borderRadius: 60,
-                            borderColor: '#dddddd',
-                            borderWidth: 1,
-                            flexDirection: 'row'
-                        }}
-                        source={{ uri: user.Image }} />
-                    <Text>{user.FirstName} {user.LastName}</Text>
+const Event = ({ item, navigation, nomPage, userInfo, uid}) => {
+    const generateUserEvent = (id) => {
+        //console.log(id)
+        const db = firebase.firestore();
+        const [userG, setUserG] = useState()
+        const ref = db.collection("users").doc(id);
+    
+        ref.get().then((doc) => {
+            setUserG(doc.data())
+        })
+    
+        if (userG != undefined) {
+            if (userG.image == "")
+                userG.image = "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"
+            return (
+                <View>
+                    <View style={{ flexDirection: 'row' }}>
+                        <Image
+                            style={{
+                                width: 60,
+                                height: 60,
+                                borderRadius: 60,
+                                borderColor: '#dddddd',
+                                borderWidth: 1,
+                                flexDirection: 'row'
+                            }}
+                            source={{ uri: userG.Image }} />
+                        <Text>{userG.FirstName} {userG.LastName}</Text>
+                    </View>
                 </View>
-            </View>
-        )
+            )
+        }
     }
-}
-
-const Event = ({ item, navigation, nomPage, userInfo, uid }) => {
     /*--variables--*/
     let description = ""
     let deleteButton = <View></View>
@@ -67,18 +66,15 @@ const Event = ({ item, navigation, nomPage, userInfo, uid }) => {
     if (userInfo != undefined) {
         if ((userInfo.isAdmin || userInfo.id == uid) && nomPage != "Calendrier") {
             deleteButton = (
-                <View>
+                <View style={{margin:30}}>
                     {/* Bouton pour lenlever' */}
-                    <TouchableOpacity style={styles.boutonDelete} onPress={() => {
-                        deleteEventById(item.nom);
-                        navigation.navigate("Forum")
-                        }}>
+                    <TouchableOpacity style={styles.boutonDelete} onPress={() => deleteEventById(item.nom)}>
                         <Text>🗑️</Text>
                     </TouchableOpacity>
                 </View>)
             editButton = (
-                <View>
-                    <TouchableOpacity style={styles.boutonEdit} onPress={() => navigation.navigate("EditEventScreen", { id: item.nom })}>
+                <View style={{margin:30}}>
+                    <TouchableOpacity style={styles.boutonEdit} onPress={() => navigation.navigate("EditEventScreen", { event: item,userInfo:userInfo})}>
                         <Text>✎</Text>
                     </TouchableOpacity>
                 </View>
@@ -89,34 +85,30 @@ const Event = ({ item, navigation, nomPage, userInfo, uid }) => {
             //si c'est lui même
             if (userInfo.Image == "")
                 userInfo.Image = "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"
-
             if (userInfo.id == uid) {
                 infosUser = (
-                    <View>
-                        <View style={{ flexDirection: 'row' }}>
-                            <Text>Par vous</Text>
-                        </View>
-                        <View style={{ flexDirection: 'row' }}>
-                            <Image
-                                style={{
-                                    width: 60,
-                                    height: 60,
-                                    borderRadius: 60,
-                                    borderColor: '#dddddd',
-                                    borderWidth: 1,
-                                    flexDirection: 'row',
-                                    backgroundColor: 'grey'
-                                }}
-                                source={{ uri: userInfo.Image }} />
-                        </View>
+                    <View style={{ flexDirection: 'row' }}>
+                        <Text>Par vous</Text>
+                        <Image
+                            style={{
+                                width: 60,
+                                height: 60,
+                                borderRadius: 60,
+                                borderColor: '#dddddd',
+                                borderWidth: 1,
+                                flexDirection: 'row',
+                                backgroundColor: 'grey'
+                            }}
+                            source={{ uri: userInfo.Image }} />
                     </View>
-
                 )
             }
             else {
                 infosUser = (generateUserEvent(uid))
             }
+
         }
+
     }
 
     return (
@@ -139,6 +131,8 @@ const Event = ({ item, navigation, nomPage, userInfo, uid }) => {
                 </View>
                 <View style={{ flexDirection: 'row' }}>
                     <EventButton navigation={navigation} item={item} nomPage={nomPage} />
+                </View>
+                <View style={{ flexDirection: 'row' }}>
                     {/* EDIT */}
                     {editButton}
                     {/* DELETE */}

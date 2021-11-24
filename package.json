@@ -59,7 +59,8 @@
     "styled-components": "^5.3.3",
     "styled-system": "^5.1.5",
     "use-theme": "^0.1.5",
-    "expo-location": "~12.1.2"
+    "expo-location": "~12.1.2",
+    "@react-native-picker/picker": "1.16.1"
   },
   "devDependencies": {
     "@babel/core": "^7.9.0"

@@ -4,6 +4,11 @@ import * as firebase from 'firebase';
 import Event from '../components/Event';
 import { AuthContext } from '../navigation/AuthProvider';
 
+const deleteEventById = async (id) => {
+    await firebase.firestore().collection("Ajouts").doc(id).delete();
+    return id;
+}
+
 const FlatListEvent = ({ data, navigation, nomPage }) => {
     const D = data
     id = 1
