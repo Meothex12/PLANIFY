@@ -10,7 +10,9 @@ const EventGoogle = ({ item, navigation, nomPage }) => {
     let rating = item.rating
     let location = item.vicinity
     let type = item.types[1]
-    let photo = item.photos[0]
+    let photo = ""
+    if(item.photos != undefined)
+        photo = item.photos[0]
     const API_KEY = "AIzaSyA4BtUvJDZEH-CFXNFbjNO-bI5He2Zlm3U"
 
     return (

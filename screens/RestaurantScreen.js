@@ -19,7 +19,7 @@ const RestaurantScreen = ({ route, navigation }) => {
   const longitude = location.longitude;
 
   let radMetter = distance * 1000;
-
+  console.log("position:",latitude,longitude)
 
   const urlResto = 'https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=' +
     latitude + ',' + longitude + '&radius=' + radMetter + '&type=' + 'restaurant' + '&key=' + API_KEY

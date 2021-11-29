@@ -47,7 +47,7 @@ const FestivalsScreen = ({ route, navigation }) => {
       </ScrollView>
     )
   }
-  else if (bars == null || restaurants == undefined) {
+  else if (amusementPark == null || amusementPark == undefined) {
     return (<PlanifyIndicator />
     )
   }
