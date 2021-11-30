@@ -23,13 +23,12 @@ const calendrier = ({ route, navigation }) => {
 
   const db = firebase.firestore();
 
-  const [ajout, setAjout] = useState(null)
-  //const [events, setEvents] = useState({})
   const [markedDates, setMarkedDate] = useState({ [today]: { marked: true, selectedColor: 'blue' } })
-  const [calendrier, setCalendrier] = useState([{}])
+  const [calendrier, setCalendrier] = useState([])
   const [date, setDate] = useState(new Date());
   const [mode, setMode] = useState('date');
   const [show, setShow] = useState(false);
+  const [edit,setEdit] = useState(null)
 
   const { user } = useContext(AuthContext);
   const [userInfo, setUserInfo] = useState()
@@ -46,6 +45,7 @@ const calendrier = ({ route, navigation }) => {
   }
 
   function addEventInCalendar(event, date) {
+    date = date.toISOString().split('T')[0]
     try {
       db.collection('Calendrier').doc(event.nom).set({
         event: event,
@@ -60,15 +60,6 @@ const calendrier = ({ route, navigation }) => {
 
   }
 
-  const editEventFromCalendar = async (event) => {
-    //   db.collection('Calendrier').doc(ancienTitre).set({
-    //     event: event,
-    //     date: today,
-    //     user: userInfo
-    // })
-    console.log(event.nom, "modifié avec succés")
-  }
-
   const deleteFromCalendar = async (event) => {
     try {
       await db.collection("Calendrier").doc(event.nom).delete();
@@ -81,46 +72,94 @@ const calendrier = ({ route, navigation }) => {
   /*--POUR ALLÉ CHERCHER LES ÉVÈNEMENTS DÉJÀ AJOUTÉ AU CALENDRIER */
   const getEventsFromCalendar = async () => {
     setCalendrier(null)
-
     const response = db.collection('Calendrier');
     const data = await response.get();
 
     let tabDates = []
-    let tabEvents = []
-    let Calendrier = ([{}])
-    let timeStamp = null
+    let Calendrier = []
 
     data.docs.forEach(item => {
       // à faire avec le id wesh
       if (item.data().user != undefined) {
         if ((item.data().user.Email).toLowerCase() == user.email.toLowerCase()) {
-          tabDates.push(item.data().date.toDate())
-          tabEvents.push(item.data().event)
-          Calendrier.push({ [item.data().date.toDate()]: item.data().event })
+          tabDates.push(item.data().date)
+          Calendrier.push(item.data())
         }
-        // else {
-        //   setEvents("Aucun évènement")
-        // }
       }
-
     })
 
     setMarkedDate(tabDates)
-    // setEvents(tabEvents)
     setCalendrier(Calendrier)
+  }
+
+  const AddToAgenda = (item) => {
+    let date = new Date()
+    let day = days[date.getDay()]
+    let num = date.getDate()
+    let month = months[date.getUTCMonth()]
+    let year = date.getFullYear()
+    let hour = date.getHours()
+    let minutes = date.getMinutes()
+    let nom = item.nom
+    
+    if(edit != null){
+      item = edit
+      nom = item.event.nom
+      console.log(item)
+    }
+
+    return (
+      <SafeAreaView style={{ flex: 1 }}>
+        <View style={styles.item}>
+          <Text style={styles.titre}>Ajout de {nom} au calendrier</Text>
+          <Text>Choisissez le moment de l'évènement</Text>
+
+          <View style={{ flexDirection: 'column', alignItems: 'center' }}>
+
+            <TouchableOpacity onPress={showDatepicker} style={styles.bouton}>
+              <Text>Date : {day} {num} {month} {year}</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity onPress={showTimepicker} style={styles.bouton}>
+              <Text>Heure : {hour}:{minutes}</Text>
+            </TouchableOpacity>
+
+            <View>
+              {show && (
+                <DateTimePicker
+                  minimumDate={new Date()}
+                  testID="dateTimePicker"
+                  value={date}
+                  mode={mode}
+                  is24Hour={true}
+                  display="default"
+                  onChange={onChange}
+                />
+              )}
+            </View>
+
+            <View style={{ flexDirection: 'row' }}>
+              <TouchableOpacity
+                style={styles.bouton}
+                onPress={() => { addEventInCalendar(item, date); item = null; navigation.navigate("Calendrier") }}>
+                <Text>
+                  Ajouter
+                </Text>
+              </TouchableOpacity>
+
+              <TouchableOpacity style={styles.bouton} onPress={() => { item = null; navigation.navigate("Calendrier") }}>
+                <Text>Annuler</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+      </SafeAreaView>
+    )
   }
 
   const AgendaPlanify = () => {
     if (calendrier != null) {
-      console.log(calendrier)
-      let events = []
-
-      calendrier.forEach((e) => {
-        console.log("element", e)
-
-      })
-
-      console.log("event:", events)
+      let compteur = 1
       return (
         <ScrollView style={{ backgroundColor: "#dcdcdc" }}>
           <Calendar
@@ -139,28 +178,36 @@ const calendrier = ({ route, navigation }) => {
 
             <FlatList
               data={calendrier}
-              refreshing={true}
-              keyExtractor={item => item.id}
               renderItem={({ item }) => {
-                return (
-                  <View>
-                    <View style={{ flexDirection: 'column' }}>
-                      <View style={{ flexDirection: 'row' }}>
-                        <Text>
-                          {item.toString()}
-                        </Text>
-                      </View>
-                      <View style={{ flexDirection: 'row' }}>
-                        <TouchableOpacity style={styles.bouton} onPress={() => deleteFromCalendar(item)}>
-                          <Text>Supprimé</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity style={styles.bouton} onPress={() => editEventFromCalendar(item)}>
-                          <Text>Modifié</Text>
-                        </TouchableOpacity>
+                  return (
+                    <View style={styles.item}>
+                      <View style={{ flexDirection: 'column' }}>
+                        <View style={{ flexDirection: 'row' }}>
+                          <Text style={styles.titre}>
+                            {compteur++}.{item.event.nom}
+                          </Text>
+                        </View>
+                        <View style={{ flexDirection: 'row' }}>
+                          <Text>
+                            {item.event.Description}
+                          </Text>
+                        </View>
+                        <View style={{ flexDirection: 'row' }}>
+                          <Text>
+                            Planifié le {item.date}
+                          </Text>
+                        </View>
+                        <View style={{ flexDirection: 'row' }}>
+                          <TouchableOpacity style={styles.bouton} onPress={() => deleteFromCalendar(item)}>
+                            <Text>Supprimé</Text>
+                          </TouchableOpacity>
+                          <TouchableOpacity style={styles.bouton} onPress={() => {setEdit(item)}}>
+                            <Text>Modifié</Text>
+                          </TouchableOpacity>
+                        </View>
                       </View>
                     </View>
-                  </View>
-                )
+                  )
               }}
             />
           </View>
@@ -205,61 +252,19 @@ const calendrier = ({ route, navigation }) => {
   }, []);
 
   /*----------------AFFICHAGE------------------*/
-  if (calendrier == undefined || calendrier == null)
-    return (<PlanifyIndicator />)
   /* AJOUT D'UN EVENT DANS LE CALENDRIER */
   if (route.params != undefined) {
     let item = route.params.event
-    return (
-      <SafeAreaView style={{ flex: 1 }}>
-        <View style={styles.item}>
-          <Text style={styles.titre}>Ajout de {item.nom} au calendrier</Text>
-          <Text>Choisissez le moment de l'évènement</Text>
-
-          <View style={{ flexDirection: 'column', alignItems: 'center' }}>
-
-            <TouchableOpacity onPress={showDatepicker} style={styles.bouton}>
-              <Text>Date : {days[date.getDay()]} {date.getDate()} {months[date.getUTCMonth()]} {date.getFullYear()}</Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity onPress={showTimepicker} style={styles.bouton}>
-              <Text>Heure : {date.getHours()}:{date.getMinutes()}</Text>
-            </TouchableOpacity>
-
-            <View>
-              {show && (
-                <DateTimePicker
-                  minimumDate={new Date()}
-                  testID="dateTimePicker"
-                  value={date}
-                  mode={mode}
-                  is24Hour={true}
-                  display="default"
-                  onChange={onChange}
-                />
-              )}
-            </View>
-
-            <View style={{ flexDirection: 'row' }}>
-              <TouchableOpacity
-                style={styles.bouton}
-                onPress={() => { addEventInCalendar(item, date); item = null; navigation.navigate("Calendrier") }}>
-                <Text>
-                  Ajouter
-                </Text>
-              </TouchableOpacity>
-
-              <TouchableOpacity style={styles.bouton} onPress={() => { item = null; navigation.navigate("Calendrier") }}>
-                <Text>Annuler</Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-        </View>
-      </SafeAreaView>
-    )
+    return (<AddToAgenda item={item} />)
   }
-  /* AFFICHAGE DE TOUT LES ÉVÈNEMENTS */
-  return (<AgendaPlanify />)
+  if(edit != null){
+    return (<AddToAgenda item={edit} />)
+  }
+  if (calendrier != undefined || calendrier != null)
+    /* AFFICHAGE DE TOUT LES ÉVÈNEMENTS */
+    return (<AgendaPlanify />)
+  else
+    return (<PlanifyIndicator />)
 }
 
 export default calendrier;
@@ -278,9 +283,9 @@ const styles = StyleSheet.create({
     fontSize: 20
   },
   item: {
-    backgroundColor: 'white',
-    borderColor: 'black',
-    borderWidth: 5,
+    backgroundColor: '#dcdcdc',
+    borderColor: 'grey',
+    borderWidth: 2,
     margin: '5%',
     flexDirection: 'column'
   },
