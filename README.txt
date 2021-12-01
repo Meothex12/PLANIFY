@@ -58,3 +58,8 @@ npm install @react-native-community/slider --save
 expo install expo-location
 
 expo install @react-native-picker/picker
+
+npm install react-native-elements
+
+npm install react-burger-menu --save
+
