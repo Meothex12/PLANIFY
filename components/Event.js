@@ -3,6 +3,8 @@ import { View, Text, StyleSheet, FlatList, TouchableOpacity, ScrollView, Button,
 import EventButton from './EventButton';
 import * as firebase from 'firebase';
 
+const db = firebase.firestore();
+
 const deleteEventById = async (id) => {
     try {
         await firebase.firestore().collection("Ajouts").doc(id).delete();
@@ -17,11 +19,8 @@ const deleteEventById = async (id) => {
     }
 }
 
-
 const Event = ({ item, navigation, nomPage, userInfo, uid}) => {
     const generateUserEvent = (id) => {
-        //console.log(id)
-        const db = firebase.firestore();
         const [userG, setUserG] = useState()
         const ref = db.collection("users").doc(id);
     
@@ -30,7 +29,7 @@ const Event = ({ item, navigation, nomPage, userInfo, uid}) => {
         })
     
         if (userG != undefined) {
-            if (userG.image == "")
+            if (userG.image == "" || userG.image == undefined)
                 userG.image = "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"
             return (
                 <View>
@@ -83,7 +82,7 @@ const Event = ({ item, navigation, nomPage, userInfo, uid}) => {
 
         if (nomPage != "Calendrier") {
             //si c'est lui même
-            if (userInfo.Image == "")
+            if (userInfo.Image == ""  || userInfo.Image == null)
                 userInfo.Image = "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"
             if (userInfo.id == uid) {
                 infosUser = (
@@ -106,11 +105,10 @@ const Event = ({ item, navigation, nomPage, userInfo, uid}) => {
             else {
                 infosUser = (generateUserEvent(uid))
             }
-
         }
-
     }
-
+    
+    //item
     return (
         <View style={styles.item}>
             <View style={{ flexDirection: 'column' }}>

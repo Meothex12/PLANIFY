@@ -12,7 +12,7 @@ const FestivalsScreen = ({ route, navigation }) => {
 
   const location = useGeoLocation()
 
-  const API_KEY = "AIzaSyA4BtUvJDZEH-CFXNFbjNO-bI5He2Zlm3U"
+  const API_KEY = "AIzaSyC8VD0YsJikZqQrqn4ize5IwcqVILvoDGo"
 
   const latitude = location.latitude;
   const longitude = location.longitude;
@@ -22,10 +22,14 @@ const FestivalsScreen = ({ route, navigation }) => {
   const urlParks = 'https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=' +
     latitude + ',' + longitude + '&radius=' + radMetter + '&type=' + 'amusement_park' + '&key=' + API_KEY
 
-  useEffect(async () => {
+  const getData = async()=>{
     const rP = await fetch(urlParks);
     const dP = await rP.json();
     setParks(dP)
+  }
+
+  useEffect(()=> {
+   getData()
   }, [])
 
   if (amusementPark != undefined  ) {

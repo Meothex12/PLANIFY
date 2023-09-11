@@ -1,6 +1,4 @@
 import React, { useContext, useState, useEffect } from 'react';
-import FormButton from '../components/FormButton';
-import { AuthContext } from '../navigation/AuthProvider';
 import { View, Text, Image, ImageBackground, StyleSheet } from 'react-native'
 import { TextInput, ScrollView, TouchableOpacity } from 'react-native-gesture-handler';
 import { LinearGradient } from 'expo-linear-gradient';

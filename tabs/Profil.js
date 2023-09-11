@@ -1,9 +1,7 @@
 import React, { useContext, useState, useEffect } from 'react';
 import { SafeAreaView, ScrollView, StyleSheet, View, Text, Image, TextInput, TouchableOpacity } from "react-native";
-import Header from "../components/Header";
 import PlanifyIndicator from "../components/PlanifyIndicator"
 import { AuthContext } from '../navigation/AuthProvider';
-import FormButton from '../components/FormButton';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { useTheme } from 'react-native-paper';
 import Feather from 'react-native-vector-icons/Feather';
@@ -94,6 +92,7 @@ const Profil = ({navigation}) => {
         let placeholderCity = "City"
         let placeholderCountry = "Country"
 
+
         return (
             <SafeAreaView style={styles.container}>
                 <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: 30 }}>
@@ -106,15 +105,15 @@ const Profil = ({navigation}) => {
                         <View style={styles.name}>
                             <Text style={styles.nameChar}>{firstName} {lastName}</Text>
                             <Text style={styles.email}>{user.email}</Text>
-                            <TouchableOpacity style={styles.logoutButton} onPress={() => logout()}>
-                                <Text style={styles.panelButtonTitle}>Logout</Text>
-                            </TouchableOpacity>
                         </View>
 
                     </View>
-                    <View>
+                    <View style={{flexDirection:'row'}}>
                         <TouchableOpacity style={styles.refreshBouton} onPress={() => {getUserInfo();setValues()}}>
-                            <Text style={styles.panelButtonTitle}>Refresh</Text>
+                            <FontAwesome name="retweet" color='#0099ff' size={20} style={{ marginBottom: 5 }} />
+                        </TouchableOpacity>
+                        <TouchableOpacity style={styles.logoutButton} onPress={() => logout()}>
+                                <FontAwesome name="sign-out" color='#ff3300' size={20}/>
                         </TouchableOpacity>
                     </View>
                     {/* modification du prénom */}
@@ -250,7 +249,8 @@ export default Profil;
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: 'white'
+        backgroundColor: 'white',
+        marginTop:20
     },
     profileInfos: {
         marginTop: 16,
@@ -317,9 +317,9 @@ const styles = StyleSheet.create({
         textAlign: 'center'
     },
     logoutButton: {
-        backgroundColor: "#e88832",
-        width: 70,
-        borderRadius: 10,
+        marginLeft: 70,
+    },
+    refreshBouton: {
         marginLeft: 170,
-    }
+    },
 })

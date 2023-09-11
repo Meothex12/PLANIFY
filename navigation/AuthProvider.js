@@ -19,6 +19,7 @@ export const AuthProvider = ({ children }) => {
                 errorRegister,
                 errorLogout,
                 login: async (email, password) => {
+                    ///TODO: Regarder si le confirm password est égal au password
                     try {
                         await firebase.auth().signInWithEmailAndPassword(email, password);
                         console.log('Logged in')

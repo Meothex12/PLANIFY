@@ -13,13 +13,13 @@ const RestaurantScreen = ({ route, navigation }) => {
 
   const location = useGeoLocation()
 
-  const API_KEY = "AIzaSyA4BtUvJDZEH-CFXNFbjNO-bI5He2Zlm3U"
+  const API_KEY = "AIzaSyC8VD0YsJikZqQrqn4ize5IwcqVILvoDGo"
 
   const latitude = location.latitude;
   const longitude = location.longitude;
 
   let radMetter = distance * 1000;
-  console.log("position:",latitude,longitude)
+  console.log("position:", latitude, longitude)
 
   const urlResto = 'https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=' +
     latitude + ',' + longitude + '&radius=' + radMetter + '&type=' + 'restaurant' + '&key=' + API_KEY
@@ -27,7 +27,7 @@ const RestaurantScreen = ({ route, navigation }) => {
   const urlBars = 'https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=' +
     latitude + ',' + longitude + '&radius=' + radMetter + '&type=' + 'bar' + '&key=' + API_KEY
 
-  useEffect(async () => {
+  const getData = async () => {
     const rR = await fetch(urlResto);
     const dR = await rR.json();
     setRestaurants(dR)
@@ -35,6 +35,9 @@ const RestaurantScreen = ({ route, navigation }) => {
     const rB = await fetch(urlBars);
     const dB = await rB.json();
     setBars(dB)
+  }
+  useEffect(() => {
+    getData()
   }, [])
 
   if (restaurants != undefined && bars != undefined) {

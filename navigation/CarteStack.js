@@ -5,9 +5,7 @@ import { createStackNavigator } from "@react-navigation/stack";
 import sportsScreen from '../screens/sportsScreen';
 import AttractionScreen from "../screens/AttractionScreen";
 import FestivalsScreen from "../screens/FestivalsScreen";
-import IdéeDateScreen from "../screens/IdéeDateScreen";
 import RestaurantScreen from "../screens/RestaurantScreen";
-import PartyScreen from "../screens/PartyScreen";
 import carte from "../tabs/Carte";
 import HomeScreen from "../screens/HomeScreen";
 
@@ -40,19 +38,10 @@ const AppStack = () => {
                 name="FestivalsScreen"
                 component={FestivalsScreen}
                 options={{ headerShown: false }}
-            /><Carte.Screen
-                name="IdéeDateScreen"
-                component={IdéeDateScreen}
-                options={{ headerShown: false }}
             />
             <Carte.Screen
                 name="RestaurantScreen"
                 component={RestaurantScreen}
-                options={{ headerShown: false }}
-            />
-            <Carte.Screen
-                name="PartyScreen"
-                component={PartyScreen}
                 options={{ headerShown: false }}
             />
         </Carte.Navigator>

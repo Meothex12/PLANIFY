@@ -1,9 +1,8 @@
 
 import * as MediaLibrary from 'expo-media-library';
 import { Camera } from 'expo-camera';
-import React, { useContext, useState, useEffect } from 'react';
-import { StyleSheet, View, Text, Image,ImageBackground, TextInput, TouchableOpacity, ActivityIndicator } from "react-native";
-import { FlatList } from 'react-native-gesture-handler';
+import React, { useState, useEffect } from 'react';
+import { StyleSheet, View, Text, Image,ImageBackground, TouchableOpacity,FlatList } from "react-native";
 
 const SelectPhotos = ({ route, navigation }) => {
 
@@ -39,6 +38,7 @@ const SelectPhotos = ({ route, navigation }) => {
             alert("Access denied")
         }
     }
+
     const takePicture = async () => {
         console.log("click")
         const p = {}
@@ -46,11 +46,13 @@ const SelectPhotos = ({ route, navigation }) => {
         setPreviewVisible(true)
         setPhoto(p)
     }
+
     const retakePicture = () => {
         setPhoto(null)
         setPreviewVisible(false)
         startCamera()
     }
+
     const savePhoto = () => {
         url = photoPrise
         console.log("nouvelle photo de profil:",url)
@@ -70,6 +72,7 @@ const SelectPhotos = ({ route, navigation }) => {
 
         return m
     }
+
     const CameraPreview = ({photo, retakePicture, savePhoto}) => {
         console.log('sdsfds', photo)
         return (
@@ -231,7 +234,6 @@ const SelectPhotos = ({ route, navigation }) => {
                 source={{ uri: url }}
                 style={{ width: 200, height: 200 }}
             />
-
             <TouchableOpacity onPress={() => startCamera()} style={styles.button}  >
                 <Text style={styles.buttonText}>Lancer la caméra</Text>
             </TouchableOpacity>

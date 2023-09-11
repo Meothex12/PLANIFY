@@ -1,9 +1,9 @@
 import React from "react";
-import { View, StyleSheet } from 'react-native';
+import { StyleSheet } from 'react-native';
 
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
-import calendrier from '../tabs/Calendrier';
+import calendrier from './CalendrierStack';
 import AppStack from './AppStack'
 import ForumStack from "./ForumStack"
 import ProfilStack from "./ProfilStack"

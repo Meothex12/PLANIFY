@@ -8,22 +8,23 @@ import Slider from '@react-native-community/slider';
 
 const fetchData = (location, distance, type) => {
     const [data, setData] = useState(null);
-    const API_KEY = "AIzaSyA4BtUvJDZEH-CFXNFbjNO-bI5He2Zlm3U"
+
+    const API_KEY = "AIzaSyC8VD0YsJikZqQrqn4ize5IwcqVILvoDGo"
+
     const latitude = location.latitude;
     const longitude = location.longitude;
+
     let radMetter = distance * 1000;
 
     const url = 'https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=' +
         latitude + ',' + longitude + '&radius=' + radMetter + '&type=' + type + '&key=' + API_KEY
 
     useEffect(() => {
-        const fetchData = async () => {
+        async () => {
             const resp = await fetch(url);
             const data = await resp.json();
             setData(data)
         }
-
-        fetchData()
     }, [])
     return data;
 }
@@ -38,12 +39,12 @@ const carte = ({ route, navigation }) => {
     }
 
     let évènement = route.params
+
     let latitudeEvent = initialRegion.latitude
     let longitudeEvent = initialRegion.longitude
+
     let nom = ""
     let page = "HomeScreen"
-
-    const API_KEY = "AIzaSyA4BtUvJDZEH-CFXNFbjNO-bI5He2Zlm3U"
     
     const [region, setRegion] = useState({ latitude: 45.642249982790126, longitude: -73.8423519855052 })
     const [eventSelectionné, setEventSélectionné] = useState()
@@ -89,7 +90,8 @@ const carte = ({ route, navigation }) => {
         )
 
     }
-    else if (évènement == undefined || évènement == null) {
+    else
+    {
         return (
             <View style={{ marginTop: 50, flex: 1 }}>
                 <GooglePlacesAutocomplete
@@ -151,10 +153,10 @@ const carte = ({ route, navigation }) => {
                             navigation.navigate("HomeScreen", { event: defaut,eventClique:eventSelectionné,details:eventDetails})
                         }}
                     />
-                    <Polyline coordinates={[
+                    {/* <Polyline coordinates={[
                         { latitude: initialRegion.latitude, longitude: initialRegion.longitude },
                         { latitude: region.latitude, longitude: region.longitude }
-                    ]} />
+                    ]} /> */}
                 </MapView>
             </View>
         )

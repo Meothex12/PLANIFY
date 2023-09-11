@@ -4,30 +4,23 @@ import * as firebase from 'firebase';
 import Event from '../components/Event';
 import { AuthContext } from '../navigation/AuthProvider';
 
+const db = firebase.firestore();
 
 const FlatListEvent = ({ data, navigation, nomPage }) => {
+    // console.log('dans flatlistevent')
     const D = data
-    id = 1
-
     const { user } = useContext(AuthContext);
-    const [userInfo, setUserInfo] = useState()
+    const [userInfo, setUserInfo] = useState(null)
 
-    const getUserInfo = async () => {
-        const db = firebase.firestore();
+    //TODO: Bon  ?
+    useEffect(() => {
         const ref = db.collection("users").doc(user.uid);
-
         ref.get().then((doc) => {
             setUserInfo(doc.data())
         })
-    }
-
-    useEffect(() => {
-        setUserInfo(null)
-        getUserInfo()
     }, []);
 
     if (D != null || D != undefined) {
-        getUserInfo()
         return (
             <View style={styles.container}>
                 <View style={styles.liste}>
@@ -47,10 +40,7 @@ const FlatListEvent = ({ data, navigation, nomPage }) => {
         )
     }
     return (<ActivityIndicator animating={true} color="black" size="large" />)
-
 }
-
-
 export default FlatListEvent;
 
 const styles = StyleSheet.create({
@@ -61,6 +51,7 @@ const styles = StyleSheet.create({
     },
     liste: {
         flexDirection: "column",
-        backgroundColor: '#dcdcdc'
+        backgroundColor: '#dcdcdc',
+        borderColor:'2px solid red'
     }
 })

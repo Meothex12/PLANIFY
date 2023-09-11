@@ -1,19 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, FlatList, ScrollView, ActivityIndicator, TouchableOpacity } from 'react-native';
-import FlatListGoogleEvents from '../components/FlatListGoogleEvents';
 import PlanifyIndicator from '../components/PlanifyIndicator';
 import useGeoLocation from '../utils/getGeoLocation';
 import EventGoogle from '../components/EventGoogle';
 
 const AttractionScreen = ({ route, navigation }) => {
 
-  let distance = 30//30km
+  let distance = 30
   const [art, setArt] = useState(null)
-  const [aquariums,setAquauriums]= useState(null)
+  const [aquariums, setAquauriums] = useState(null)
 
   const location = useGeoLocation()
 
-  const API_KEY = "AIzaSyA4BtUvJDZEH-CFXNFbjNO-bI5He2Zlm3U"
+  const API_KEY = "AIzaSyC8VD0YsJikZqQrqn4ize5IwcqVILvoDGo"
 
   const latitude = location.latitude;
   const longitude = location.longitude;
@@ -24,10 +23,9 @@ const AttractionScreen = ({ route, navigation }) => {
     latitude + ',' + longitude + '&radius=' + radMetter + '&type=' + 'art_gallery' + '&key=' + API_KEY
 
   const urlAquarium = 'https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=' +
-  latitude + ',' + longitude + '&radius=' + radMetter + '&type=' + 'aquarium' + '&key=' + API_KEY
+    latitude + ',' + longitude + '&radius=' + radMetter + '&type=' + 'aquarium' + '&key=' + API_KEY
 
-  useEffect(async () => {
-
+  const getData = async () => {
     const rA = await fetch(urlArts);
     const dA = await rA.json();
     setArt(dA)
@@ -35,9 +33,13 @@ const AttractionScreen = ({ route, navigation }) => {
     const rAqua = await fetch(urlAquarium);
     const dAqua = await rAqua.json();
     setAquauriums(dAqua)
+  }
+  useEffect(() => {
+    getData()
   }, [])
 
-  if (aquariums != undefined && art != undefined ) {
+  if (aquariums != undefined && art != undefined) {
+    console.log(aquariums)
     return (
       <ScrollView>
         <View style={styles.liste}>
